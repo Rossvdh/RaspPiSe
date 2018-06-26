@@ -60,7 +60,7 @@ def pushed_right(event):
 		sense.set_pixel(marker[0], marker[1], blue)
 
 def buttonPushed(event):
-	"""What happens when the joystick is pushed up. The square is 
+	"""What happens when the joystick button is pushed. The square is 
 	coloured with the appropriate colour"""
 	global redTurn
 	if event.action == ACTION_RELEASED:
@@ -204,6 +204,10 @@ blue = [0,0,255]
 blank = [0,0,0]
 white = [255,255,255]
 
+# set up sense hat
+sense.low_light = True;
+sense.set_rotation(180) # USB ports of the RPi on the left
+
 # define the Tic Tac Toe grid
 grid=[blank,blank,white,blank,blank,white,blank,blank,
   blank,blank,white,blank,blank,white,blank,blank,
@@ -213,11 +217,6 @@ grid=[blank,blank,white,blank,blank,white,blank,blank,
   white,white,white,white,white,white,white,white,
   blank,blank,white,blank,blank,white,blank,blank,
   blank,blank,white,blank,blank,white,blank,blank]
-
-# set up sense hat
-sense.low_light = True;
-sense.set_rotation(180) # USB ports of the RPi on the left
-
 # set grid
 sense.set_pixels(grid)
 
