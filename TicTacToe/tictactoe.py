@@ -9,7 +9,8 @@ from sense_hat import SenseHat, ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 from signal import pause
 
 sense = sense_hat.SenseHat()
-xTurn = True
+redTurn = True
+
 # colour is the colour to make the square
 # row and col are the co-ords of the grid i.e. 0 - 2
 def colourSquare(colour, row, col):
@@ -20,122 +21,155 @@ def colourSquare(colour, row, col):
   sense.set_pixel(row,col+1,colour)
   sense.set_pixel(row+1,col+1,colour)
 
+
 def pushed_up(event):
-  if event.action == ACTION_RELEASED:
-    sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-    marker[1] = (marker[1] -3) % 9
-    sense.set_pixel(marker[0], marker[1], u)
+	"""What happens when the joystick is pushed up. The marker moves up
+	to the next square"""
+	print("up pushed. but move down")
+	if event.action == ACTION_RELEASED:
+		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
+		marker[1] = (marker[1] + 3) % 9
+		sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_down(event):
-  if event.action == ACTION_RELEASED:
-    sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-    marker[1] = (marker[1] +3) % 9
-    sense.set_pixel(marker[0], marker[1], u)
+	"""What happens when the joystick is pushed up. The marker moves 
+	down to square below the current one"""
+	print("down pushed, but move up")
+	if event.action == ACTION_RELEASED:
+		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
+		marker[1] = (marker[1] - 3) % 9
+		sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_left(event):
-  if event.action == ACTION_RELEASED:
-    sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-    marker[0] = (marker[0] -3) % 9
-    sense.set_pixel(marker[0], marker[1], u)
+	"""What happens when the joystick is pushed up. The marker moves to
+	the square left of the current one"""
+	print("left pushed, but move right")
+	if event.action == ACTION_RELEASED:
+		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
+		marker[0] = (marker[0] + 3) % 9
+		sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_right(event):
-  if event.action == ACTION_RELEASED:
-    sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-    marker[0] = (marker[0] +3) % 9
-    sense.set_pixel(marker[0], marker[1], u)
+	print("right pushed, but move left")
+	"""What happens when the joystick is pushed up. The marker moves to
+	the square right of the current one"""
+	if event.action == ACTION_RELEASED:
+		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
+		marker[0] = (marker[0] - 3) % 9
+		sense.set_pixel(marker[0], marker[1], blue)
 
 def buttonPushed(event):
-  global xTurn
-  print("button pushed")
-  if event.action == ACTION_RELEASED:
-    print("released")
-    print("xTurn: ",xTurn,"x:", x,"marker[0]:",marker[0], ". marker[1]:",marker[1])
-    
-  if sense.get_pixel(marker[0], marker[1]+1) == [0,0,0]:
-    if xTurn:
-      xTurn = not xTurn
-      colourSquare(x, marker[0], marker[1])
-    else:
-      xTurn = not xTurn
-      colourSquare(o, marker[0], marker[1])
+	"""What happens when the joystick is pushed up. The square is 
+	coloured with the appropriate colour"""
+	global redTurn
+	print("button pushed")
+	if event.action == ACTION_RELEASED:
+		print("released")
+		print("redTurn: ",redTurn,"x:", red,"marker[0]:",marker[0], ". marker[1]:",marker[1])
+	
+		if sense.get_pixel(marker[0], marker[1]+1) == [0,0,0]:
+			if redTurn:
+				redTurn = not redTurn
+				colourSquare(red, marker[0], marker[1])
+			else:
+				redTurn = not redTurn
+				colourSquare(green, marker[0], marker[1])
 
 
 def isWinningRow():
-  for i in range(0,3):
-    if sense.get_pixel(i,1) == sense.get_pixel(i,4) == sense.get_pixel(i,7):
-      return [i,1];
-  return -1
+	"""Check if a player has won on a row"""
+	for i in [1,4,7]:
+		if sense.get_pixel(1,i) == sense.get_pixel(4,i) == sense.get_pixel(7,i):
+			return sense.get_pixel(1,i);
+	return -1
 
 def isWinningCol():
-  for i in range(0,3):
-    if sense.get_pixel(1,i) == sense.get_pixel(4,i) == sense.get_pixel(7,1):
-      return [1,i]
-  return -1
+	"""Check if a player has won on a column"""
+	for i in [1,4,7]:
+		if sense.get_pixel(i,1) == sense.get_pixel(i,4) == sense.get_pixel(i,7):
+			return sense.get_pixel(i,1)
+	return -1
 
 def isWinningDiag():
-  if sense.get_pixel(1,1) == sense.get_pixel(4,4) == sense.get_pixel(7,7):
-    return [1,1]
-  if sense.get_pixel(1,6) == sense.get_pixel(4,3) == sense.get_pixel(7,1):
-    return [1,6]
-  return -1
+	"""Check if a player has won on one of the diagonals"""
+	if sense.get_pixel(1,1) == sense.get_pixel(4,4) == sense.get_pixel(7,7):
+		return sense.get_pixel(1,1)
+	if sense.get_pixel(6,1) == sense.get_pixel(3,4) == sense.get_pixel(0,7):
+		return sense.get_pixel(6,1)
+	return -1
   
 def getWinner():
-  #check rows
-  pixel = isWinningRow()
-  if pixel != -1:
-    #theres a winning row
-    if pixel == [255,0,0]:
-      # x (red) is winner
-      return x
-    else:
-      return o
+	"""Determine which colour has won (if any)"""
+	#check rows
+	pixel = isWinningRow()
+	print("check rows returns:", pixel)
+	if pixel != -1:
+		#theres a winning row
+		if pixel == [0,252,0]:
+			return green
+		elif pixel == blank:
+			pass
+		else:
+			return red
   
-  pixel = isWinningCol()
-  if pixel != -1:
-    #theres a winning row
-    if pixel == [255,0,0]:
-      # x (red) is winner
-      return x
-    else:
-      return o  
+	pixel = isWinningCol()
+	print("check cols returns:", pixel)
+	if pixel != -1:
+		if pixel == [0,252,0]:
+			return green
+		elif pixel == blank:
+			pass
+		else:
+			return red
       
-  pixel = isWinningDiag()
-  if pixel != -1:
-    #theres a winning row
-    if pixel == [255,0,0]:
-      # x (red) is winner
-      return x
-    else:
-      return o
+	pixel = isWinningDiag()
+	print("check diags returns:", pixel)
+	if pixel != -1:
+		#theres a winning diag
+		if pixel == [0,252,0]:
+			return green
+		elif pixel == blank:
+			pass
+		else:
+			return red
+
       
-  return b
+	return blank
+
+def checkTie():
+	for i in [1, 4, 7]:
+		for j in [1, 4, 7]:
+			if sense.get_pixel(i,j) == blank:
+				return False
+	return True
 
 def checkWinner():
-  if getWinner == x:
-    time.sleep(0.3)
-    sense.set_pixels([x, x, x, x, x, x, x, x,
-      x, b, b, b, b, b, b, x,
-      x, b, x, x, x, x, b, x,
-      x, b, x, b, b, x, b, x,
-      x, b, x, b, b, x, b, x,
-      x, b, x, x, x, x, b, x,
-      x, b, b, b, b, b, b, x,
-      x, x, x, x, x, x, x, x])
-  elif getWinner == o:
-    time.sleep(0.3)
-    sense.set_pixels([o, o, o, o, o, o, o, o,
-      o, b, b, b, b, b, b, o,
-      o, b, o, o, o, o, b, o,
-      o, b, o, b, b, o, b, o,
-      o, b, o, b, b, o, b, o,
-      o, b, o, o, o, o, b, o,
-      o, b, b, b, b, b, b, o,
-      o, o, o, o, o, o, o, o])
-  else:
-    return
-  time.sleep(1)
-  sense.set_pixels(grid)
-
+	"""Checks if someone has won. Runs after every button action"""
+	winner = getWinner()
+	if winner == green:
+		time.sleep(0.5)
+		sense.show_message("Green Wins!")
+		print("green wins")
+		time.sleep(0.5)
+		sense.set_pixels(grid)
+	elif winner == red:
+		time.sleep(0.5)
+		sense.show_message("Red wins!")
+		print("red wins")
+		time.sleep(0.5)
+		sense.set_pixels(grid)
+	else:
+		#check if tie
+		if checkTie():
+			print("tie")
+			time.sleep(0.5)
+			sense.show_message("Tie!")
+			time.sleep(0.5)
+			sense.set_pixels(grid)
+		print("No winner yet")
+	
+  
+#set functions for jotstick buttons
 sense.stick.direction_up = pushed_up
 sense.stick.direction_down = pushed_down
 sense.stick.direction_left = pushed_left
@@ -143,24 +177,26 @@ sense.stick.direction_right = pushed_right
 sense.stick.direction_middle = buttonPushed
 sense.stick.direction_any = checkWinner
 
-x = [255,0,0]
-o = [0,255,0]
-u = [0,0,255]
-b = [0,0,0]
-w = [255,255,255]
+#define some colours
+red = [255,0,0]
+green = [0,255,0]
+blue = [0,0,255]
+blank = [0,0,0]
+white = [255,255,255]
 
-grid=[b,b,w,b,b,w,b,b,
-  b,b,w,b,b,w,b,b,
-  w,w,w,w,w,w,w,w,
-  b,b,w,b,b,w,b,b,
-  b,b,w,b,b,w,b,b,
-  w,w,w,w,w,w,w,w,
-  b,b,w,b,b,w,b,b,
-  b,b,w,b,b,w,b,b]
+grid=[blank,blank,white,blank,blank,white,blank,blank,
+  blank,blank,white,blank,blank,white,blank,blank,
+  white,white,white,white,white,white,white,white,
+  blank,blank,white,blank,blank,white,blank,blank,
+  blank,blank,white,blank,blank,white,blank,blank,
+  white,white,white,white,white,white,white,white,
+  blank,blank,white,blank,blank,white,blank,blank,
+  blank,blank,white,blank,blank,white,blank,blank]
 
 sense.low_light = True;
+sense.set_rotation(180)
 sense.set_pixels(grid)
 marker=[0,0]
-sense.set_pixel(marker[0], marker[1], u)
+sense.set_pixel(marker[0], marker[1], blue)
 print("about to pause")
-pause() #stop execution and wiat for event
+pause() #stop execution and wait for event
