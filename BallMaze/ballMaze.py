@@ -152,27 +152,48 @@ roll = gyro["roll"]
 keepPlaying = True
 
 while keepPlaying:
-    time.sleep(0.1)
+    time.sleep(0.4)
     gyro = sense.get_orientation_degrees()
     prevPitch = pitch
     pitch = gyro["pitch"]
+    print("pitch:", pitch)
 
-    if pitch - prevPitch < -2:
+## this version works with the difference between the current angle and the
+## previous. works but very jerky.   
+##    if pitch - prevPitch < -2:
+##        #move ball one way
+##        moveBallLeft()
+##    elif pitch - prevPitch > 2:
+##        #move ball the other way
+##        moveBallRight()
+##
+##    if keepPlaying:
+##        prevRoll = roll
+##        roll = gyro["roll"]
+##        if roll - prevRoll < -2:
+##            #move ball one way
+##            moveBallDown()
+##        elif roll - prevRoll > 2:
+##            #move ball the other way
+##            moveBallUp()
+    
+    if 185 < pitch < 355:
         #move ball one way
         moveBallLeft()
-    elif pitch - prevPitch > 2:
+    elif 5 < pitch < 175:
         #move ball the other way
         moveBallRight()
 
     if keepPlaying:
-        prevRoll = roll
+        gyro = sense.get_orientation_degrees()
         roll = gyro["roll"]
-        if roll - prevRoll < -2:
+        if 185 < roll < 355:
             #move ball one way
             moveBallDown()
-        elif roll - prevRoll > 2:
+        elif 5 < roll < 175:
             #move ball the other way
             moveBallUp()
+
 
 print("end")
 
