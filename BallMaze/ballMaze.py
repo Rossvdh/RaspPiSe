@@ -81,8 +81,8 @@ def moveBallLeft():
 def getMoveType(ball):
     """Determines if the move is legal, into a wall, or results in
     a death or a win"""
-    if not(0<= ball[0] <=7 and 0<= ball[1] <=7):
-        return DIE #out of bounds move. you die
+    if not(0<= ball[0] <=7 and 0<= ball[1] <=7) or maze[8*ball[1] + ball[0]] == red:
+        return DIE #out of bounds or move into hole. you die
     elif maze[8*ball[1] + ball[0]] == blu:
         return WALL #move into wall. you can't move
     elif ball == end:
@@ -156,7 +156,7 @@ def stopLooping(event):
 def readMaze():
     """Reads a maze layout, including start and end points from
     a text file."""
-    mazeFile = open("maze1.txt")
+    mazeFile = open("maze5.txt")
     lines = mazeFile.readlines()
     mazeFile.close()
 
@@ -185,6 +185,9 @@ def readMaze():
             elif i == "w":
                 #wall
                 maze.append(blu)
+            elif i == "h":
+                #h for hole
+                maze.append(red)
             else:
                 #target LED
                 maze.append(gre)
