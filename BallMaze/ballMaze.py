@@ -10,6 +10,8 @@ from signal import pause
 
 def moveBallUp():
     """Move ball one LED towards the top of the matrix"""
+    #the move ball methodss look like good candidates for an if statement
+    #assignment. Downside is they are all basically the same
     sense.set_pixel(ball[0], ball[1], [0,0,0])
     ball[1] = ball[1] - 1
     
@@ -17,11 +19,16 @@ def moveBallUp():
     move = getMoveType(ball)
     if move == LEGAL:
         sense.set_pixel(ball[0], ball[1], ora)
-    elif move == DIE:
-        die()
     elif move == WALL:
         ball[1] = ball[1] + 1
         sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
+    elif move == DIE:
+        die()
     else:
         win()
 
@@ -35,11 +42,16 @@ def moveBallDown():
     move = getMoveType(ball)
     if move == LEGAL:
         sense.set_pixel(ball[0], ball[1], ora)
-    elif move == DIE:
-        die()
     elif move == WALL:
         ball[1] = ball[1] - 1
         sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
+    elif move == DIE:
+        die()
     else:
         win()
 
@@ -55,6 +67,11 @@ def moveBallRight():
     elif move == WALL:
         ball[0] = ball[0] - 1
         sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
     elif move == DIE:
         die()
     else:
@@ -72,6 +89,11 @@ def moveBallLeft():
     elif move == WALL:
         ball[0] = ball[0] + 1
         sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
     elif move == DIE:
         die()
     else:
@@ -81,8 +103,11 @@ def moveBallLeft():
 def getMoveType(ball):
     """Determines if the move is legal, into a wall, or results in
     a death or a win"""
-    if not(0<= ball[0] <=7 and 0<= ball[1] <=7) or maze[8*ball[1] + ball[0]] == red:
-        return DIE #out of bounds or move into hole. you die
+    #also a good candidate for if statment assignment
+    if not(0<= ball[0] <=7 and 0<= ball[1] <=7):
+        return DIE #out of bounds. you die
+    elif maze[8*ball[1] + ball[0]] == red:
+        return HOLE #move into hole. you die
     elif maze[8*ball[1] + ball[0]] == blu:
         return WALL #move into wall. you can't move
     elif ball == end:
@@ -91,7 +116,8 @@ def getMoveType(ball):
         return LEGAL #normal legal move
 
 def die():
-    """Ends the game (player looses because they fell of the grid)"""
+    """Ends the game (player looses because they fell off the grid
+    or moved into a hole)"""
     global ballIsAlive
     time.sleep(0.5)
     sense.show_message(text_string="You died", text_colour=[255, 51, 0])
@@ -125,11 +151,13 @@ def play():
     sense.set_pixel(end[0], end[1], gre)
     
     while ballIsAlive and playAgain:
+        print("Ball:", ball)
         time.sleep(0.4)
 
         #read left/right angle, move ball accordingly
         gyro = sense.get_orientation_degrees()
         pitch = gyro["pitch"]
+        #these ifs also for assignment?
         if 185 < pitch < 355:
             moveBallLeft()
         elif 5 < pitch < 175:
@@ -156,6 +184,7 @@ def stopLooping(event):
 def readMaze():
     """Reads a maze layout, including start and end points from
     a text file."""
+    #provide this function in its entirety?
     mazeFile = open("maze5.txt")
     lines = mazeFile.readlines()
     mazeFile.close()
@@ -191,12 +220,14 @@ def readMaze():
             else:
                 #target LED
                 maze.append(gre)
+
     return start, end, maze
 
 
 #-----------------------------------------------------
 # define moves
-DIE = -1
+DIE = -2
+HOLE = -1
 WALL = 0
 LEGAL = 1
 WIN = 2
@@ -219,7 +250,6 @@ sense = sense_hat.SenseHat()
 sense.low_light = True
 sense.set_rotation(180)
 sense.set_imu_config(True, True, True)
-
 sense.stick.direction_middle = stopLooping
 
 #start play
