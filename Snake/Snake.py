@@ -7,12 +7,15 @@ import sense_hat
 from sense_hat import ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 import time
 from signal import pause
+import random
 
 #SORT OUT THESE NAMES!
 def down(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
         DIRECTION = UP
+        #convert to tuple because a list can't be used as a
+        #dictionary key
         turningPoints[tuple(snake[0][0])] = UP
 
 def up(event):
@@ -38,8 +41,11 @@ def stopGame():
     play = False
 
 def slither():
+    global food
     for i in range(len(snake)):
         segment = snake[i]
+        #convert to tuple because a list can't be used as a
+        #dictionary key
         pixel = tuple(segment[0])
 
         if pixel in turningPoints.keys():
@@ -48,6 +54,16 @@ def slither():
             #if all points in the snake have passed, remove the TP
             if i == len(snake)-1:
                 turningPoints.pop(pixel)
+
+        if i == 0 and pixel == tuple(food):
+            # the head eats the food
+            print("eat")
+            sense.set_pixel(food[0], food[1], [0,0,0])
+
+            #snake grows
+##            grow = list(snake[len(snake)-1]
+            #move food
+            food = generateFood()
 
         #move
         dire = segment[1]
@@ -60,7 +76,18 @@ def slither():
         else:
             segment[0][0] +=1
 
-        
+def generateFood():
+    temp = [random.randint(0,7), random.randint(0,7)]
+
+    snakePixels = []
+    for i in snake:
+        snakePixels.append(i[0])
+
+    #check that the food does not fall in the snake
+    while i in snakePixels:
+        temp = [random.randint(0,7), random.randint(0,7)]
+
+    return temp
 
 #MAIN
 sense = sense_hat.SenseHat()
@@ -97,15 +124,22 @@ turningPoints = {}
 # the snake is a list of pixels, where a pixel is a 2-tuple where
 # the first entry is a list with the co-ords, and the second is the
 # direction that the pixel is moving in.
-snake = [[[4,4], DOWN], [[4,3], DOWN], [[4,2], DOWN], [[4,1], DOWN], [[4,0], DOWN]]
+snake = [[[4,4], DOWN], [[4,3], DOWN]]
 
 #we are reaching the point where Snake probably needs to be a class
+
+##food = [random.randint(0,7), random.randint(0,7)]
+
+food = generateFood()
+sense.set_pixel(food[0], food[1], gre)
 
 play = True
 
 while play:
     # draw snake
     sense.clear()
+    sense.set_pixel(food[0], food[1], gre)
+    
     for dot in snake:
         sense.set_pixel(dot[0][0], dot[0][1], blu)
         
@@ -123,7 +157,6 @@ while play:
     slither()
 
 sense.clear()
-print("TPs:", turningPoints)
 print("end")
 
 
