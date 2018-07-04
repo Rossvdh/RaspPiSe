@@ -13,38 +13,43 @@ import random
 def down(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        DIRECTION = UP
-        #convert to tuple because a list can't be used as a
-        #dictionary key
-        turningPoints[tuple(snake[0][0])] = UP
+        if DIRECTION != DOWN: # don't let the snake go back on itself
+            DIRECTION = UP
+            #convert to tuple because a list can't be used as a
+            #dictionary key
+            turningPoints[tuple(snake[0][0])] = UP
 
 def up(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        DIRECTION = DOWN
-        turningPoints[tuple(snake[0][0])] = DOWN
+        if DIRECTION != UP:
+            DIRECTION = DOWN
+            turningPoints[tuple(snake[0][0])] = DOWN
         
 def left(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        DIRECTION = RIGHT
-        turningPoints[tuple(snake[0][0])] = RIGHT
+        if DIRECTION != LEFT:
+            DIRECTION = RIGHT
+            turningPoints[tuple(snake[0][0])] = RIGHT
 
 def right(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        DIRECTION = LEFT
-        turningPoints[tuple(snake[0][0])] = LEFT
+        if DIRECTION != RIGHT:
+            DIRECTION = LEFT
+            turningPoints[tuple(snake[0][0])] = LEFT
 
 def stopGame():
+    """When the middle button is pressed, stop the game"""
     global playAgain, alive
     playAgain = False
     alive = False
 
 def slither():
-    """Moves the snake and food's co-ordinates, but does not set the LED
+    """Moves the snake and food's co-ordinates, but does not set the LEDs
     in the matrix."""
-    global food
+    global food, alive
     grow = []
     eat = False
     for i in range(len(snake)):
@@ -67,18 +72,7 @@ def slither():
 
             #snake grows (new segment to be added)
             grow = list(snake[len(snake)-1])
-
             grow[0] = list(grow[0])
-
-##            if grow[1] == UP:
-##                grow[0][1] += 1
-##            elif grow[1] == LEFT:
-##                grow[0][0] += 1
-##            elif grow[1] == DOWN:
-##                grow[0][1] -= 1
-##            else:
-##                grow[0][0] -= 1
-            
             snake.append(grow)
             
             #move food
@@ -95,11 +89,19 @@ def slither():
         else:
             segment[0][0] +=1
 
-##    if grow != []:
-##        print("grow:", grow)
+        #check if new position is not in the snake
+        snakePixels = []
+        for i in snake:
+            snakePixels.append(i[0])
+
+        if snakePixels.count(segment[0]) > 1:
+            die()
+            return
         
 
 def generateFood():
+    """Place sthe food (target LED) on a random LED in the matrix
+    that is not in the snake"""
     temp = [random.randint(0,7), random.randint(0,7)]
 
     snakePixels = []
@@ -107,7 +109,7 @@ def generateFood():
         snakePixels.append(i[0])
 
     #check that the food does not fall in the snake
-    while i in snakePixels:
+    while temp in snakePixels:
         temp = [random.randint(0,7), random.randint(0,7)]
 
     return temp
@@ -122,10 +124,8 @@ def play():
         if 0 <= dot[0][0] <= 7 and 0 <= dot[0][1] <= 7:
             sense.set_pixel(dot[0][0], dot[0][1], blu)
         else:
-            sense.show_message("You died", text_colour=[255,51,0])
-            sense.show_message("Final length: "+ str(len(snake)))
-            alive = False
-            break
+            die()
+            return
 
     if alive:
         # blink snake's head
@@ -138,6 +138,13 @@ def play():
             time.sleep(0.2)
 
         slither()
+
+def die():
+    """When the snake dies by going off the grid or into itself"""
+    global alive
+    alive = False
+    sense.show_message("You died", text_colour=[255,51,0])
+    sense.show_message("Final length: "+ str(len(snake)))
 
 #MAIN
 sense = sense_hat.SenseHat()
@@ -201,6 +208,7 @@ while playAgain:
     #start game play
     while alive:
         play()
+
 
 sense.clear()
 print("end")
