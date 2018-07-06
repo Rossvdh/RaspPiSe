@@ -174,21 +174,21 @@ def checkWinner():
 		time.sleep(0.5)
 		sense.show_message("Green Wins!")
 		
-		#reset grid to play again
-		time.sleep(0.5)
-		sense.set_pixels(grid)
+		playAgain()
 	elif winner == red:
 		time.sleep(0.5)
 		sense.show_message("Red wins!")
-		time.sleep(0.5)
-		sense.set_pixels(grid)
+		playAgain()
 	elif checkTie():
 		time.sleep(0.5)
 		sense.show_message("Tie!")
-		time.sleep(0.5)
-		sense.set_pixels(grid)
-	
-  
+		playAgain()
+
+def playAgain():
+  time.sleep(0.5)
+  sense.set_pixels(grid)
+  sense.set_pixel(marker[0], marker[1], blue)
+
 #set functions for jotstick buttons
 sense.stick.direction_up = pushed_up
 sense.stick.direction_down = pushed_down
@@ -217,6 +217,9 @@ grid=[blank,blank,white,blank,blank,white,blank,blank,
   white,white,white,white,white,white,white,white,
   blank,blank,white,blank,blank,white,blank,blank,
   blank,blank,white,blank,blank,white,blank,blank]
+
+
+sense.show_message("Get ready!")
 # set grid
 sense.set_pixels(grid)
 
