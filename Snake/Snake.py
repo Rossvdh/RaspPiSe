@@ -9,8 +9,8 @@ import time
 from signal import pause
 import random
 
-#SORT OUT THESE NAMES!
-def south(event):
+
+def up(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
         if DIRECTION != DOWN: # don't let the snake go back on itself
@@ -19,21 +19,21 @@ def south(event):
             #dictionary key
             turningPoints[tuple(snake[0][0])] = UP
 
-def north(event):
+def down(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
         if DIRECTION != UP:
             DIRECTION = DOWN
             turningPoints[tuple(snake[0][0])] = DOWN
         
-def west(event):
+def right(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
         if DIRECTION != LEFT:
             DIRECTION = RIGHT
             turningPoints[tuple(snake[0][0])] = RIGHT
 
-def east(event):
+def left(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
         if DIRECTION != RIGHT:
@@ -151,10 +151,10 @@ sense = sense_hat.SenseHat()
 
 sense.low_light = True
 ##sense.set_rotation(180)
-sense.stick.direction_down = south
-sense.stick.direction_up = north
-sense.stick.direction_left = west
-sense.stick.direction_right = east
+sense.stick.direction_down = down
+sense.stick.direction_up = up
+sense.stick.direction_left = left
+sense.stick.direction_right = right
 sense.stick.direction_middle = stopGame
 
 blu = [0,0,255]

@@ -31,7 +31,7 @@ def pushed_up(event):
 		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
 		
 		#move marker to next square
-		marker[1] = (marker[1] + 3) % 9
+		marker[1] = (marker[1] - 3) % 9
 		#set marker pixel to blue
 		sense.set_pixel(marker[0], marker[1], blue)
 
@@ -40,7 +40,7 @@ def pushed_down(event):
 	down to square below the current one"""
 	if event.action == ACTION_RELEASED:
 		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-		marker[1] = (marker[1] - 3) % 9
+		marker[1] = (marker[1] + 3) % 9
 		sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_left(event):
@@ -48,7 +48,7 @@ def pushed_left(event):
 	the square left of the current one"""
 	if event.action == ACTION_RELEASED:
 		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-		marker[0] = (marker[0] + 3) % 9
+		marker[0] = (marker[0] - 3) % 9
 		sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_right(event):
@@ -56,7 +56,7 @@ def pushed_right(event):
 	the square right of the current one"""
 	if event.action == ACTION_RELEASED:
 		sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
-		marker[0] = (marker[0] - 3) % 9
+		marker[0] = (marker[0] + 3) % 9
 		sense.set_pixel(marker[0], marker[1], blue)
 
 def buttonPushed(event):
@@ -206,7 +206,6 @@ white = [255,255,255]
 
 # set up sense hat
 sense.low_light = True;
-sense.set_rotation(180) # USB ports of the RPi on the left
 
 # define the Tic Tac Toe grid
 grid=[blank,blank,white,blank,blank,white,blank,blank,
