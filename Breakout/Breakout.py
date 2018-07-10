@@ -18,32 +18,42 @@ def moveBall():
     """Moves the ball. Deletes a brick if the ball hits one."""
     global ball, ballDir, grid
     if ballDir == NW:
+
+        if grid[8*ball[1] + ball[0]] == ora:
+            ballDir = SW
+            grid[8*ball[1] + ball[0]] = blk
+            ball[0]-=1
+            ball[1]+=1
+            return
+            
+        
         #move up and left
         ball[0]-=1
         ball[1]-=1
 
-        #check for bounce on block of blues
+        #check for bounce on side of LED matrix
         if ball[0] <0:
             ballDir = NE
             ball[0]+=2
 
+        #check for bounce on top edge of matrix
         if ball[1] < 0:
             ballDir = SW
             ball[1]+=2
 
-##        elif ball[1] < 0:
-##            ballDir = SW
-##            ball[0]-=1
-##            ball[1]+=1
-##        elif grid[8*ball[1] + ball[0]] == blu:
-##            grid[8*ball[1] + ball[0]] = blk
-##            #bounces to SW
-##            ballDir = SW
-##
-##            ball[0]-=1
-##            ball[1]+=1
+        #check for bounce on blue LED
+        if grid[8*ball[1] + ball[0]] == blu:
+            grid[8*ball[1] + ball[0]] = ora
             
     elif ballDir == NE:
+        if grid[8*ball[1] + ball[0]] == ora:
+            grid[8*ball[1] + ball[0]] = blk
+            ballDir = SE
+            ball[0]+=1
+            ball[1]+=1
+            return
+            
+            
         #move up and right
         ball[0]+=1
         ball[1]-=1
@@ -55,8 +65,19 @@ def moveBall():
         if ball[1] < 0:
             ballDir = SE
             ball[1]+=2
+
+        #check for bounce on blue LED
+        if grid[8*ball[1] + ball[0]] == blu:
+            grid[8*ball[1] + ball[0]] = ora
         
     elif ballDir == SE:
+        if grid[8*ball[1] + ball[0]] == ora:
+            grid[8*ball[1] + ball[0]] = blk
+            ballDir = NE
+            ball[0]+=1
+            ball[1]-=1
+            return
+            
         #down and right
         ball[0]+=1
         ball[1]+=1
@@ -67,8 +88,18 @@ def moveBall():
 
         if ball[1] >= 7:
             die()
+
+        #check for bounce on blue LED
+        if grid[8*ball[1] + ball[0]] == blu:
+            grid[8*ball[1] + ball[0]] = ora
+    else: #SW
+        if grid[8*ball[1] + ball[0]] == ora:
+            grid[8*ball[1] + ball[0]] = blk
+            ballDir = NW
+            ball[0]-=1
+            ball[1]-=1
+            return
             
-    else:
         #SW: down and left
         ball[0]-=1
         ball[1]+=1
@@ -80,7 +111,13 @@ def moveBall():
         if ball[1] >= 7:
             die()
 
+        #check for bounce on blue LED
+        if grid[8*ball[1] + ball[0]] == blu:
+            grid[8*ball[1] + ball[0]] = ora
+
 def die():
+    global keepPlaying
+    keepPlaying = False
     print("die")
 
 def refreshMatrix():
@@ -166,7 +203,7 @@ for i in bar:
 #display ball
 ball = [3,6]
 sense.set_pixel(ball[0], ball[1], gre)
-ballDir = NW
+ballDir = NE
 
 keepPlaying = True
 
