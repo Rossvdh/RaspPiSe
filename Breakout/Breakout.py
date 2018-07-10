@@ -14,18 +14,17 @@ def stopGame(event):
     global keepPlaying
     keepPlaying = False;
 
+# there's got to be a better way of doing this function
 def moveBall():
     """Moves the ball. Deletes a brick if the ball hits one."""
     global ball, ballDir, grid
     if ballDir == NW:
-
         if grid[8*ball[1] + ball[0]] == ora:
             ballDir = SW
             grid[8*ball[1] + ball[0]] = blk
             ball[0]-=1
             ball[1]+=1
             return
-            
         
         #move up and left
         ball[0]-=1
@@ -53,7 +52,6 @@ def moveBall():
             ball[1]+=1
             return
             
-            
         #move up and right
         ball[0]+=1
         ball[1]-=1
@@ -77,6 +75,13 @@ def moveBall():
             ball[0]+=1
             ball[1]-=1
             return
+
+        # check for bounce on bar
+        if ball[1] == 6 and (bar[0][0] <= ball[0] <= bar[0][0] + 2):
+            ballDir = NE
+            ball[0]+=1
+            ball[1]-=1
+            return
             
         #down and right
         ball[0]+=1
@@ -92,6 +97,7 @@ def moveBall():
         #check for bounce on blue LED
         if grid[8*ball[1] + ball[0]] == blu:
             grid[8*ball[1] + ball[0]] = ora
+
     else: #SW
         if grid[8*ball[1] + ball[0]] == ora:
             grid[8*ball[1] + ball[0]] = blk
@@ -99,7 +105,14 @@ def moveBall():
             ball[0]-=1
             ball[1]-=1
             return
-            
+
+        # check for bounce on bar
+        if ball[1] == 6 and (bar[0][0] <= ball[0] <= bar[0][0] + 2):
+            ballDir = NW
+            ball[0]-=1
+            ball[1]-=1
+            return
+        
         #SW: down and left
         ball[0]-=1
         ball[1]+=1
@@ -108,12 +121,12 @@ def moveBall():
             ballDir = SE
             ball[0]+=2
 
-        if ball[1] >= 7:
-            die()
-
         #check for bounce on blue LED
         if grid[8*ball[1] + ball[0]] == blu:
             grid[8*ball[1] + ball[0]] = ora
+
+        
+            
 
 def die():
     global keepPlaying
@@ -133,28 +146,49 @@ def moveBarRight(event):
     """Move the bounce bar one LED right"""
     if event.action == ACTION_RELEASED:
         global bar
-        for i in reversed(bar):
-            i[0]+=1
 
-            if i[0] > 7:
+        # for when rotation has been set to something else
+        # (mostly just for my convenience)
+        if sense.rotation== 0:
+            for i in reversed(bar):
+                i[0]+=1
+
+                if i[0] > 7:
+                    i[0]-=1
+                    break
+        else:
+            for i in bar:
                 i[0]-=1
-                break
 
+                if i[0] < 0:
+                    i[0]+=1
+                    break
+            
 def moveBarLeft(event):
     """Move the bounce bar one LED left"""
     if event.action == ACTION_RELEASED:
         global bar
-        for i in bar:
-            i[0]-=1
+        if sense.rotation== 0:
+            for i in bar:
+                i[0]-=1
 
-            if i[0] < 0:
+                if i[0] < 0:
+                    i[0]+=1
+                    break
+        else:
+            for i in reversed(bar):
                 i[0]+=1
-                break
+
+                if i[0] > 7:
+                    i[0]-=1
+                    break
+            
 
 #set up the senseHat stuff
 sense = sense_hat.SenseHat()
 
 sense.low_light = True
+sense.set_rotation(180)
 ##sense.stick.direction_down = down
 ##sense.stick.direction_up = up
 sense.stick.direction_left = moveBarLeft
@@ -196,6 +230,7 @@ grid = [blu, blu, blu, blu, blu, blu, blu, blu,
 sense.set_pixels(grid)
 
 #display bar
+# make the bar and ball start at a random place?
 bar = [[2,7], [3,7], [4,7]]
 for i in bar:
     sense.set_pixel(i[0], i[1], whi)
@@ -203,7 +238,7 @@ for i in bar:
 #display ball
 ball = [3,6]
 sense.set_pixel(ball[0], ball[1], gre)
-ballDir = NE
+ballDir = NW
 
 keepPlaying = True
 
