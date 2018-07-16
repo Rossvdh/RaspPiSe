@@ -14,13 +14,13 @@ redTurn = True
 # colour is the colour to make the square. array of 3 values bewteen 0 and 255
 # corresponding to red, green and blue
 # row and col are the co-ords of the grid i.e. 0 - 2
-def colourSquare(colour, row, col):
+def colourSquare(colour, col, row):
   row = int(row)#row and col might be floats
   col = int(col)
-  sense.set_pixel(row, col, colour)
-  sense.set_pixel(row+1, col, colour)
-  sense.set_pixel(row, col+1, colour)
-  sense.set_pixel(row+1, col+1, colour)
+  sense.set_pixel(col, row, colour)
+  sense.set_pixel(col+1, row, colour)
+  sense.set_pixel(col, row+1, colour)
+  sense.set_pixel(col+1, row+1, colour)
 
 
 def pushed_up(event):
@@ -74,7 +74,7 @@ def buttonPushed(event):
 				redTurn = not redTurn
 				colourSquare(green, marker[0], marker[1])
 		
-		checkWinner()
+		checkForWinner()
 
 
 def isWinningRow():
@@ -117,7 +117,7 @@ def isWinningDiag():
 			return sense.get_pixel(6,1)
 	
 	return -1
-  
+
 def getWinner():
 	"""Determine which colour has won (if any)"""
 	#check for a winning row
@@ -128,36 +128,37 @@ def getWinner():
 		if pixel == [0,252,0]: #sometimes the colours read from the LEDs
 							#do not exactly match what they were set to.
 							#more details in the API.
-			return green
+			return "green"
 		elif pixel == [248, 0, 0]:
-			return red
+			return "red"
 
 	#check for winning column
 	pixel = isWinningCol()
 	print("pixel:", pixel)
 	if pixel != -1:
 		if pixel == [0,252,0]:
-			return green
+			return "green"
 		elif pixel == [248, 0, 0]:
-			return red
+			return "red"
     
-    #check for winning diagonal  
+        #check for winning diagonal  
 	pixel = isWinningDiag()
 	print("pixel:", pixel)
 	if pixel != -1:
 		#there is a winning diag
 		if pixel == [0,252,0]:
-			return green
+			return "green"
 		elif pixel == [248, 0, 0]:
-			return red
+			return "red"
     
-    #no winner
-	return blank
+        #no winner
+	return "none"
+
 
 def checkTie():
 	"""Checks if the game is a tie (no winner). If there is a blank 
 	pixel, at least one square of the grid is not coloured yet and it is
-	 not a tie yet"""
+	not a tie yet"""
 	# it is only necessary to check one pixel in each grid square
 	for i in [1, 4, 7]:
 		for j in [1, 4, 7]:
@@ -166,7 +167,7 @@ def checkTie():
 	#all relevant pixels have been checked, no blanks found
 	return True
 
-def checkWinner():
+def checkForWinner():
 	"""Checks if someone has won. Runs after every button action"""
 	winner = getWinner()
 	print("winner: ", winner)
@@ -185,6 +186,7 @@ def checkWinner():
 		playAgain()
 
 def playAgain():
+  """Restarts the game"""
   time.sleep(0.5)
   sense.set_pixels(grid)
   sense.set_pixel(marker[0], marker[1], blue)
