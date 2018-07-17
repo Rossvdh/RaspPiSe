@@ -12,80 +12,43 @@ import SnakeClass
 def up(event):
     """When the joystick is pushed up, change the snake's direction
     of movement to upwards"""
-    if event.action == sense_hat.ACTION_RELEASED:
-        snake.changeDirection(UP)
+    pass
 
 def down(event):
     """When the joystick is pushed down, change the snake's direction
     of movement to downwards"""
-    if event.action == sense_hat.ACTION_RELEASED:
-        snake.changeDirection(DOWN)
+    pass
         
 def right(event):
     """When the joystick is pushed right, change the snake's direction
     of movement to the right"""
-    if event.action == sense_hat.ACTION_RELEASED:
-        snake.changeDirection(RIGHT)
+    pass
 
 def left(event):
     """When the joystick is pushed left, change the snake's direction
     of movement to the left"""
-    if event.action == sense_hat.ACTION_RELEASED:
-        snake.changeDirection(LEFT)
+    pass
 
 def stopGame():
     """When the middle joystick button is pressed, stop the game"""
-    global playAgain, alive
-    playAgain = False
-    alive = False
+    pass
 
 def generateFood():
     """Places the food (target LED) on a random LED in the matrix
     that is not in the snake"""
-    #good scaffold candidate
-    temp = [random.randint(0,7), random.randint(0,7)]
-
-    snakePixels = snake.getPixels()
-
-    #check that the food does not fall in the snake
-    while temp in snakePixels:
-        temp = [random.randint(0,7), random.randint(0,7)]
-
-    return temp
+    return [4,5]
 
 def updateMatrix():
     """Draws the snake and food in the new positions on the LED matrix"""
     #good scaffold candidate
-    # draw food
-    sense.clear()
-    sense.set_pixel(food[0], food[1], gre)
 
-    # draw snake
-    snakePixels = snake.getPixels()
-    for pixel in snakePixels:
-        if 0 <= pixel[0] <= 7 and 0 <= pixel[1] <= 7:
-            sense.set_pixel(pixel[0], pixel[1], blu)
-        else:
-            die()
-            return
-
-    # blink snake's head
-    for i in range(2):
-        x = snake.head()[0]
-        y = snake.head()[1]
-        sense.set_pixel(x, y, blk)
-        time.sleep(0.1)
-        sense.set_pixel(x, y, blu)
-        time.sleep(0.1)
+    pass
 
 
 def die():
     """When the snake dies by going off the grid or into itself"""
     #scaffold candidate
-    global alive
-    alive = False
-    sense.show_message("You died", text_colour=[255,51,0])
-    sense.show_message("Final length: "+ str(snake.getLength()))
+    pass
 
 #MAIN
 #set up the senseHat stuff
@@ -123,7 +86,7 @@ while playAgain:
     time.sleep(1)
     sense.show_letter("1")
     time.sleep(1)
-    
+
     food = generateFood()
 
     #start game play

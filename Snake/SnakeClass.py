@@ -20,7 +20,7 @@ class SnakeClass:
         """Returns a tuple with co-ords of the head of the snake"""
         return tuple(self.body[0][0])
 
-    def slither(self, food, alive):
+    def slither(self, food):
         """Moves the snake and food's co-ordinates, but does not set the LEDs
         in the matrix. Returns the result of the movement: "eat" when the
         snake eats the food and grows, "die" when the snake dies, or "none"
