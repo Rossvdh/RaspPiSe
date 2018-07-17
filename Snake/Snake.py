@@ -19,6 +19,10 @@ def up(event):
             #dictionary key
             turningPoints[tuple(snake[0][0])] = UP
 
+def up2(event):
+    if event.action == ACTION_RELEASED:
+        snake.changeDirection(UP)
+
 def down(event):
     global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
@@ -100,6 +104,7 @@ def slither():
 def generateFood():
     """Places the food (target LED) on a random LED in the matrix
     that is not in the snake"""
+    #good scaffold candidate
     temp = [random.randint(0,7), random.randint(0,7)]
 
     snakePixels = []
@@ -114,6 +119,7 @@ def generateFood():
 
 def updateMatrix():
     """Draws the snake and food in the new positions on the LED matrix"""
+    #good scaffold candidate
     global alive
 
     # draw food
@@ -140,6 +146,7 @@ def updateMatrix():
 
 def die():
     """When the snake dies by going off the grid or into itself"""
+    #scaffold candidate
     global alive
     alive = False
     sense.show_message("You died", text_colour=[255,51,0])
@@ -150,7 +157,6 @@ def die():
 sense = sense_hat.SenseHat()
 
 sense.low_light = True
-##sense.set_rotation(180)
 sense.stick.direction_down = down
 sense.stick.direction_up = up
 sense.stick.direction_left = left
