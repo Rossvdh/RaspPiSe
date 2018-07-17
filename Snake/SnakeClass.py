@@ -22,9 +22,11 @@ class SnakeClass:
 
     def slither(self, food, alive):
         """Moves the snake and food's co-ordinates, but does not set the LEDs
-        in the matrix."""
+        in the matrix. Returns the result of the movement: "eat" when the
+        snake eats the food and grows, "die" when the snake dies, or "none"
+        when niether of those 2 happen."""
         print("slither")
-        result = "None"
+        result = "none"
         newSegment = []
 
         for i in range(len(self.body)):
@@ -50,8 +52,6 @@ class SnakeClass:
                 self.body.append(newSegment)
 
                 result = "eat"
-                #move food
-##                food = generateFood()
 
             #move the snake
             dire = segment[1]
@@ -68,8 +68,8 @@ class SnakeClass:
             snakePixels = self.getPixels()
 
             if snakePixels.count(segment[0]) > 1:
-##                die()
                 result = "die"
+                
         return result
 
     def changeDirection(self, newDirec):

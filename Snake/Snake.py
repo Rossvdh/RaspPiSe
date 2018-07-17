@@ -12,77 +12,34 @@ import SnakeClass
 
 
 def up(event):
+    """When the joystick is pushed up, change the snake's direction
+    of movement to upwards"""
     if event.action == ACTION_RELEASED:
         snake.changeDirection(UP)
 
 def down(event):
+    """When the joystick is pushed down, change the snake's direction
+    of movement to downwards"""
     if event.action == ACTION_RELEASED:
         snake.changeDirection(DOWN)
         
 def right(event):
+    """When the joystick is pushed right, change the snake's direction
+    of movement to the right"""
     if event.action == ACTION_RELEASED:
         snake.changeDirection(RIGHT)
 
 def left(event):
+    """When the joystick is pushed left, change the snake's direction
+    of movement to the left"""
     if event.action == ACTION_RELEASED:
         snake.changeDirection(LEFT)
 
 def stopGame():
-    """When the middle button is pressed, stop the game"""
+    """When the middle joystick button is pressed, stop the game"""
     global playAgain, alive
     playAgain = False
     alive = False
-
-def slither():
-    """Moves the snake and food's co-ordinates, but does not set the LEDs
-    in the matrix."""
-    global food, alive
-    newSegment = []
-
-    for i in range(len(snake)):
-        segment = snake[i]
-        #convert to tuple because a list can't be used as a
-        #dictionary key
-        pixel = tuple(segment[0])
-
-        # check for turning point
-        if pixel in turningPoints.keys():
-            segment[1] = turningPoints[pixel]
-            
-            #if all points in the snake have passed, remove the TP
-            if i == len(snake)-1:
-                #being removed before the newly added segment gets to it
-                turningPoints.pop(pixel)
-
-        if i == 0 and pixel == tuple(food):
-            # the head eats the food
-            # snake grows (new segment to be added)
-            newSegment = list(snake[len(snake)-1])
-            newSegment[0] = list(newSegment[0])
-            snake.append(newSegment)
-            
-            #move food
-            food = generateFood()
-
-        #move the snake
-        dire = segment[1]
-        if dire == UP:
-            segment[0][1] -=1
-        elif dire == LEFT:
-            segment[0][0] -=1
-        elif dire == DOWN:
-            segment[0][1] +=1
-        else:
-            segment[0][0] +=1
-
-        #check if new position is in the snake
-        snakePixels = []
-        for i in snake:
-            snakePixels.append(i[0])
-
-        if snakePixels.count(segment[0]) > 1:
-            die()
-            return
 
 def generateFood():
     """Places the food (target LED) on a random LED in the matrix
@@ -121,9 +78,9 @@ def updateMatrix():
         x = snake.head()[0]
         y = snake.head()[1]
         sense.set_pixel(x, y, blk)
-        time.sleep(0.2)
+        time.sleep(0.1)
         sense.set_pixel(x, y, blu)
-        time.sleep(0.2)
+        time.sleep(0.1)
 
 
 def die():
@@ -137,14 +94,12 @@ def die():
 #MAIN
 #set up the senseHat stuff
 sense = sense_hat.SenseHat()
-
 sense.low_light = True
 sense.stick.direction_down = down
 sense.stick.direction_up = up
 sense.stick.direction_left = left
 sense.stick.direction_right = right
 sense.stick.direction_middle = stopGame
-
 blu = [0,0,255]
 red = [255,0,0]
 gre = [0,255,0]
@@ -160,17 +115,13 @@ DOWN = 2
 LEFT = 3
 
 playAgain = True
-alive = True
 
 while playAgain:
-    DIRECTION = DOWN
-
     snake = SnakeClass.SnakeClass()
-    print("snake created!")
+    alive = True
+##    print("snake created!")
 
     food = generateFood()
-
-    alive = True
 
     #countdown
     sense.show_letter("3")
