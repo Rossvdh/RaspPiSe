@@ -11,94 +11,98 @@ class SnakeClass:
     LEFT = 3
 
     def __init__(self):
-        self.body = [[[4,1], DOWN], [[4,0], DOWN]]
+        self.body = [[[4,1], SnakeClass.DOWN], [[4,0], SnakeClass.DOWN]]
 
         self.turningPoints = {}
-        self.direction  = DOWN
+        self.direction  = SnakeClass.DOWN
 
     def head(self):
         """Returns a tuple with co-ords of the head of the snake"""
-        return tuple(body[0][0])
+        return tuple(self.body[0][0])
 
     def slither(self, food, alive):
         """Moves the snake and food's co-ordinates, but does not set the LEDs
         in the matrix."""
+        print("slither")
+        result = "None"
         newSegment = []
 
-        for i in range(len(snake)):
-            segment = snake[i]
+        for i in range(len(self.body)):
+            segment = self.body[i]
             #convert to tuple because a list can't be used as a
             #dictionary key
             pixel = tuple(segment[0])
 
             # check for turning point
-            if pixel in turningPoints.keys():
-                segment[1] = turningPoints[pixel]
+            if pixel in self.turningPoints.keys():
+                segment[1] = self.turningPoints[pixel]
                 
                 #if all points in the snake have passed, remove the TP
-                if i == len(snake)-1:
+                if i == len(self.body)-1:
                     #being removed before the newly added segment gets to it
-                    turningPoints.pop(pixel)
+                    self.turningPoints.pop(pixel)
 
             if i == 0 and pixel == tuple(food):
                 # the head eats the food
                 # snake grows (new segment to be added)
-                newSegment = list(snake[len(snake)-1])
+                newSegment = list(self.body[len(self.body)-1])
                 newSegment[0] = list(newSegment[0])
-                snake.append(newSegment)
-                
+                self.body.append(newSegment)
+
+                result = "eat"
                 #move food
-                food = generateFood()
+##                food = generateFood()
 
             #move the snake
             dire = segment[1]
-            if dire == UP:
+            if dire == SnakeClass.UP:
                 segment[0][1] -=1
-            elif dire == LEFT:
+            elif dire == SnakeClass.LEFT:
                 segment[0][0] -=1
-            elif dire == DOWN:
+            elif dire == SnakeClass.DOWN:
                 segment[0][1] +=1
             else:
                 segment[0][0] +=1
 
             #check if new position is in the snake
-            snakePixels = []
-            for i in snake:
-                snakePixels.append(i[0])
+            snakePixels = self.getPixels()
 
             if snakePixels.count(segment[0]) > 1:
-                die()
-                return
+##                die()
+                result = "die"
+        return result
 
     def changeDirection(self, newDirec):
         """Changes the direction of the Snake's movement"""
-        if self.direction == UP:
-            if newDirec != DOWN:
+        if self.direction == SnakeClass.UP:
+            if newDirec != SnakeClass.DOWN:
                 self.direction = newDirec
-                self.turningPoints[head()] = self.direction
-        elif self.direction == RIGHT:
-            if newDirec != LEFT:
+                self.turningPoints[self.head()] = self.direction
+        elif self.direction == SnakeClass.RIGHT:
+            if newDirec != SnakeClass.LEFT:
                 self.direction = newDirec
-                self.turningPoints[head()] = self.direction
-        elif self.direction == DOWN:
-            if newDirec != UP:
+                self.turningPoints[self.head()] = self.direction
+        elif self.direction == SnakeClass.DOWN:
+            if newDirec != SnakeClass.UP:
                 self.direction = newDirec
-                self.turningPoints[head()] = self.direction
+                self.turningPoints[self.head()] = self.direction
         else:
             #must be left
-            if newDirec != RIGHT:
+            if newDirec != SnakeClass.RIGHT:
                 self.direction = newDirec
-                self.turningPoints[head()] = self.direction
+                self.turningPoints[self.head()] = self.direction
 
     def getPixels(self):
         """Returns a list of the pixels the snake is occupying. Pixels
         are represented by a list with 2 elements"""
         snakePixels = []
-        for i in snake:
+        for i in self.body:
             snakePixels.append(i[0])
         return snakePixels
 
-
+    def getLength(self):
+        """Returns the length of the snake"""
+        return len(self.body)
 
 
 

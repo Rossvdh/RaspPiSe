@@ -8,41 +8,24 @@ from sense_hat import ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 import time
 from signal import pause
 import random
+import SnakeClass
 
 
 def up(event):
-    global DIRECTION, turningPoints, snake
-    if event.action == ACTION_RELEASED:
-        if DIRECTION != DOWN: # don't let the snake go back on itself
-            DIRECTION = UP
-            #convert to tuple because a list can't be used as a
-            #dictionary key
-            turningPoints[tuple(snake[0][0])] = UP
-
-def up2(event):
     if event.action == ACTION_RELEASED:
         snake.changeDirection(UP)
 
 def down(event):
-    global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        if DIRECTION != UP:
-            DIRECTION = DOWN
-            turningPoints[tuple(snake[0][0])] = DOWN
+        snake.changeDirection(DOWN)
         
 def right(event):
-    global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        if DIRECTION != LEFT:
-            DIRECTION = RIGHT
-            turningPoints[tuple(snake[0][0])] = RIGHT
+        snake.changeDirection(RIGHT)
 
 def left(event):
-    global DIRECTION, turningPoints, snake
     if event.action == ACTION_RELEASED:
-        if DIRECTION != RIGHT:
-            DIRECTION = LEFT
-            turningPoints[tuple(snake[0][0])] = LEFT
+        snake.changeDirection(LEFT)
 
 def stopGame():
     """When the middle button is pressed, stop the game"""
@@ -107,9 +90,7 @@ def generateFood():
     #good scaffold candidate
     temp = [random.randint(0,7), random.randint(0,7)]
 
-    snakePixels = []
-    for i in snake:
-        snakePixels.append(i[0])
+    snakePixels = snake.getPixels()
 
     #check that the food does not fall in the snake
     while temp in snakePixels:
@@ -127,17 +108,18 @@ def updateMatrix():
     sense.set_pixel(food[0], food[1], gre)
 
     # draw snake
-    for pixel in snake:
-        if 0 <= pixel[0][0] <= 7 and 0 <= pixel[0][1] <= 7:
-            sense.set_pixel(pixel[0][0], pixel[0][1], blu)
+    snakePixels = snake.getPixels()
+    for pixel in snakePixels:
+        if 0 <= pixel[0] <= 7 and 0 <= pixel[1] <= 7:
+            sense.set_pixel(pixel[0], pixel[1], blu)
         else:
             die()
             return
 
     # blink snake's head
     for i in range(2):
-        x = snake[0][0][0]
-        y = snake[0][0][1]
+        x = snake.head()[0]
+        y = snake.head()[1]
         sense.set_pixel(x, y, blk)
         time.sleep(0.2)
         sense.set_pixel(x, y, blu)
@@ -150,7 +132,7 @@ def die():
     global alive
     alive = False
     sense.show_message("You died", text_colour=[255,51,0])
-    sense.show_message("Final length: "+ str(len(snake)))
+    sense.show_message("Final length: "+ str(snake.getLength()))
 
 #MAIN
 #set up the senseHat stuff
@@ -183,17 +165,8 @@ alive = True
 while playAgain:
     DIRECTION = DOWN
 
-    # dictionary of points where the snake turns. a turning point
-    # consists of a 2-tuple (x,y) as the key and the direction to which
-    # the snake turns as the value, e.g. {(3, 5): 1} (where 1 is RIGHT)
-    turningPoints = {}
-
-    # the snake is a list of segments, where a segment is a list where
-    # the first entry is a list with the co-ords of the pixel,
-    # and the second is the direction that the pixel is moving in.
-    #we are reaching the point where Snake probably needs to be a class
-    #or maybe just pixel, and then snake is a list of pixels
-    snake = [[[4,1], DOWN], [[4,0], DOWN]]    
+    snake = SnakeClass.SnakeClass()
+    print("snake created!")
 
     food = generateFood()
 
@@ -210,8 +183,15 @@ while playAgain:
     #start game play
     while alive:
         updateMatrix()
-        slither()
+        result = snake.slither(food, alive)
+        if result == "eat":
+            print("eat")
+            food = generateFood()
+        elif result == "die":
+            print("die")
+            die()
 
+    
 
 sense.clear()
 print("end")
