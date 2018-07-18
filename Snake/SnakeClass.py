@@ -25,7 +25,6 @@ class SnakeClass:
         in the matrix. Returns the result of the movement: "eat" when the
         snake eats the food and grows, "die" when the snake dies, or "none"
         when niether of those 2 happen."""
-        print("slither")
         result = "none"
         newSegment = []
 

@@ -29,7 +29,7 @@ def left(event):
     of movement to the left"""
     pass
 
-def stopGame():
+def stopGame(event):
     """When the middle joystick button is pressed, stop the game"""
     pass
 
@@ -40,15 +40,12 @@ def generateFood():
 
 def updateMatrix():
     """Draws the snake and food in the new positions on the LED matrix"""
-    #good scaffold candidate
-
     pass
-
 
 def die():
     """When the snake dies by going off the grid or into itself"""
-    #scaffold candidate
     pass
+    
 
 #MAIN
 #set up the senseHat stuff
@@ -92,7 +89,7 @@ while playAgain:
     #start game play
     while alive:
         updateMatrix()
-        result = snake.slither(food, alive)
+        result = snake.slither(food)
         if result == "eat":
             print("eat")
             food = generateFood()

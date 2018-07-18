@@ -33,11 +33,12 @@ def left(event):
     if event.action == sense_hat.ACTION_RELEASED:
         snake.changeDirection(LEFT)
 
-def stopGame():
+def stopGame(event):
     """When the middle joystick button is pressed, stop the game"""
-    global playAgain, alive
-    playAgain = False
-    alive = False
+    if event.Action == sense_hat.ACTION_RELEASED:
+        global playAgain, alive
+        playAgain = False
+        alive = False
 
 def generateFood():
     """Places the food (target LED) on a random LED in the matrix
