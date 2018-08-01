@@ -169,7 +169,7 @@ def playAgain():
 # MAIN-----------------------
 # set up sense hat
 sense = sense_hat.SenseHat()
-sense.low_light = True;
+#sense.low_light = True;
 
 #set functions for joystick buttons
 sense.stick.direction_up = pushed_up

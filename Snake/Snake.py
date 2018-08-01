@@ -35,7 +35,7 @@ def left(event):
 
 def stopGame(event):
     """When the middle joystick button is pressed, stop the game"""
-    if event.Action == sense_hat.ACTION_RELEASED:
+    if event.action == sense_hat.ACTION_RELEASED:
         global playAgain, alive
         playAgain = False
         alive = False
@@ -91,7 +91,7 @@ def die():
 #MAIN
 #set up the senseHat stuff
 sense = sense_hat.SenseHat()
-sense.low_light = True
+#sense.low_light = True
 sense.stick.direction_down = down
 sense.stick.direction_up = up
 sense.stick.direction_left = left
@@ -130,7 +130,7 @@ while playAgain:
     #start game play
     while alive:
         updateMatrix()
-        result = snake.slither(food, alive)
+        result = snake.slither(food)
         if result == "eat":
             print("eat")
             food = generateFood()

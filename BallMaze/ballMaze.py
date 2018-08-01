@@ -255,7 +255,7 @@ ball = start
 
 #set up senseHat
 sense = sense_hat.SenseHat()
-sense.low_light = True
+#sense.low_light = True
 sense.set_imu_config(True, True, True)
 sense.stick.direction_middle = stopLooping
 

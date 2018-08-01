@@ -171,12 +171,12 @@ def checkForWinner():
 	"""Checks if someone has won. Runs after every button action"""
 	winner = getWinner()
 	print("winner: ", winner)
-	if winner == green:
+	if winner == "green":
 		time.sleep(0.5)
 		sense.show_message("Green Wins!")
 		
 		playAgain()
-	elif winner == red:
+	elif winner == "red":
 		time.sleep(0.5)
 		sense.show_message("Red wins!")
 		playAgain()
@@ -191,7 +191,7 @@ def playAgain():
   sense.set_pixels(grid)
   sense.set_pixel(marker[0], marker[1], blue)
 
-#set functions for jotstick buttons
+#set functions for joystick buttons
 sense.stick.direction_up = pushed_up
 sense.stick.direction_down = pushed_down
 sense.stick.direction_left = pushed_left
