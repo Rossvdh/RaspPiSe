@@ -17,7 +17,7 @@ def isWinningRow(board):
     all the same colour.) Returns the colour of the row if there is a 
     winning row, else -1"""
     for row in board:
-        print("Check row. row:",row)
+        #print("Check row. row:",row)
         if row[0] == row[1] == row[2] and row[0] != blank:
             return row[0]
     return -1
@@ -52,7 +52,6 @@ def getWinner(board):
     """Determine which colour has won (if any)"""
     #check for a winning row
     pixel = isWinningRow(board)
-    print("pixel:", pixel)
     if pixel != -1:
         #there is a winning row
         if pixel == green:
@@ -62,7 +61,6 @@ def getWinner(board):
 
     #check for winning column
     pixel = isWinningCol(board)
-    print("pixel:", pixel)
     if pixel != -1:
         if pixel == green:
             return "green"
@@ -71,7 +69,6 @@ def getWinner(board):
 
     #check for winning diagonal  
     pixel = isWinningDiag(board)
-    print("pixel:", pixel)
     if pixel != -1:
         #there is a winning diag
         if pixel == green:
