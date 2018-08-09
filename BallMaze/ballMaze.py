@@ -134,15 +134,53 @@ def die():
 def win():
     """Player wins the game (ball has successfully been moved to the target
     LED"""
-    global ballIsAlive
+    global ballIsAlive, startTime
+    totalTime = round(time.time() - startTime, 2)
     sense.set_pixel(end[0], end[1], ora)
     time.sleep(0.5)
     sense.show_message(text_string="You win", text_colour=[51, 204, 51])
+    sense.show_message("Time: "+ str(totalTime)+" s")
+    saveTime(totalTime)
     ballIsAlive = False
+
+def saveTime(time):
+    """Saves the given time to the file time.txt if the time
+    is lowest than the current saved for for the current maze."""
+    #read file to get current best time
+    print("time:", time)
+    print("opening file")
+    fileName = "times.txt"
+    file = open(fileName, "r")
+
+    lines = file.readlines()
+    file.close()
+    print("file read")
+    
+    mazeNumber = mazeFileName[4]
+    print("mazeNumber =", mazeNumber)
+
+    file = open(fileName, "w")
+
+    for line in lines:
+        if line[0] == mazeNumber:
+            #extract time
+            bestTime = float(line[3:-1])
+            print("best time:", bestTime)
+
+            if time < bestTime:
+                print(mazeNumber+": " + str(time)+"\n", file=file, end="")
+            else:
+                print(line, file=file, end="")
+        else:
+            print(line, file=file, end="")
+
+    file.close()
+    print("writing complete")
+        
 
 def play():
     """Plays the game."""
-    global ballIsAlive, ball, start, playAgain
+    global ballIsAlive, ball, start, playAgain, startTime
 
     #countdown to start
     sense.show_letter("3")
@@ -157,6 +195,9 @@ def play():
     ball = list(start)
     sense.set_pixel(ball[0], ball[1], ora)
     sense.set_pixel(end[0], end[1], gre)
+
+    #start timer
+    startTime = time.time()
     
     while ballIsAlive and playAgain:
         print("Ball:", ball)
@@ -181,6 +222,7 @@ def play():
                 moveBallUp()
 
 
+
 def stopLooping(event):
     """When the user press the joystick middle button, stop starting
     a new game"""
@@ -189,11 +231,11 @@ def stopLooping(event):
         playAgain = False
         print("playAgain = False")
 
-def readMaze():
+def readMaze(mazeFile):
     """Reads a maze layout, including start and end points from
     a text file."""
     #provide this function in its entirety?
-    mazeFile = open("maze1.txt")
+    mazeFile = open(mazeFile)
     lines = mazeFile.readlines()
     mazeFile.close()
 
@@ -250,12 +292,13 @@ yel = [255,255,0]
 blk = [0,0,0]
 
 #read in maze from file
-start, end, maze = readMaze()
+mazeFileName = "maze3.txt"
+start, end, maze = readMaze(mazeFileName)
 ball = start
 
 #set up senseHat
 sense = sense_hat.SenseHat()
-#sense.low_light = True
+sense.low_light = True
 sense.set_imu_config(True, True, True)
 sense.stick.direction_middle = stopLooping
 

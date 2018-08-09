@@ -15,12 +15,12 @@ import ttt
 # row and col are the co-ords of the LED in the top left corner of the ttt
 # grid square
 def colourSquare(colour, col, row):
-  row = int(row)#row and col might be floats
-  col = int(col)
-  sense.set_pixel(col, row, colour)
-  sense.set_pixel(col+1, row, colour)
-  sense.set_pixel(col, row+1, colour)
-  sense.set_pixel(col+1, row+1, colour)
+    row = int(row)#row and col might be floats
+    col = int(col)
+    sense.set_pixel(col, row, colour)
+    sense.set_pixel(col+1, row, colour)
+    sense.set_pixel(col, row+1, colour)
+    sense.set_pixel(col+1, row+1, colour)
 
 def pushed_up(event):
     """What happens when the joystick is pushed up. The marker moves up
@@ -69,47 +69,45 @@ def buttonPushed(event):
 
         if sense.get_pixel(marker[0], marker[1]+1) == [0,0,0]:
             if redTurn:
-                redTurn = not redTurn
                 board[marker[1]//3][marker[0]//3] = red
             else:
-                redTurn = not redTurn
                 board[marker[1]//3][marker[0]//3] = green
+                
+            redTurn = not redTurn
+            drawBoard(board)
 
-        drawBoard(board)
-
-        result = ttt.checkForWinner(board)
-        if result == "red":
-            sense.show_message("Red wins")
-            playAgain()
-        elif result == "green":
-            sense.show_message("Green wins")
-            playAgain()
-        elif result == "tie":
-            sense.show_message("Tie")
-            playAgain()
-        else:
-            computerPlay()
+            result = ttt.checkForWinner(board)
+            if result == "red":
+                sense.show_message("Red wins")
+                playAgain()
+            elif result == "green":
+                sense.show_message("Green wins")
+                playAgain()
+            elif result == "tie":
+                sense.show_message("Tie")
+                playAgain()
+            else:
+                computerPlay()
 
 def playAgain():
-    global board
     """Restarts the game"""
+    global board, redTurn
     time.sleep(0.5)
     redTurn = True
     sense.set_pixels(grid)
     sense.set_pixel(marker[0], marker[1], blue)
 
     board = [[blank, blank, blank],
-	[red, blank, blank],
-	[red, green, green]]
+    [green, blank, blank],
+    [blank, red, blank]]
+
     drawBoard(board)
 
 """Draws the board on the LED matrix"""
 def drawBoard(board):
     for row in range(3):
         for col in range(3):
-            #print(board[col][row], "\t", end="")
             colourSquare(board[col][row], row*3, col*3)
-        #print("")
 
 def copyBoard(board): #seems ok
     """Creates a copy of the given board"""
@@ -123,6 +121,7 @@ def copyBoard(board): #seems ok
     return copy
 
 def getAvailableMoves(board): #seems ok
+    """"Returns a list of blank grid sqaures"""
     moves = []
     for row in range(3):
         for col in range(3):
@@ -144,19 +143,17 @@ def getPlayMove(moves):
     where move is a 2-tuple (row, col). Best move is the one with the highest
     score. If there are multiple moves with the same highest score, one is
     chosen randomly."""
-    print("1. getPlayMove. moves.length:", len(moves))
-    print("getPlayMove. moves:", moves)
+##    print("1. getPlayMove. moves.length:", len(moves))
+##    print("getPlayMove. moves:", moves)
     lst = list(moves.items()) # list is [((row, col), score), ..]
 
     #shuffle
     lst = shuffle(lst)
 
     #sort descending on score(scaffold) 
-    for i in range(len(lst)-1):
-        for j in range(i, len(lst)-i-1):
-            if lst[j][1] < lst[j+1][1]:
-                 lst[j+1], lst[j] = lst[j], lst[j+1]
+    lst.sort(key=(lambda i : i[1]), reverse=True)
 
+##    print("sorted:", lst)
     return lst[0]
 
 def getBestMove(board, colour):
@@ -176,10 +173,11 @@ def getBestMove(board, colour):
         result = ttt.checkForWinner(copy)
 
         if result == "red" or result == "green":
+            movesAndScores[moves[0]] = 10
             return (moves[0], 10)
         else:
+            movesAndScores[moves[0]] = 0
             return (moves[0], 0)
-
 
     for move in moves:
         #create a copy of the board
@@ -190,35 +188,42 @@ def getBestMove(board, colour):
 
         #see what happens
         result = ttt.checkForWinner(copy)
-        score =0
+        score = 0
         if result == "red" or result == "green":
             score = 10
             return (move, 10)
         elif result == "tie":
-            score = 0
-            movesAndScores[move] = 0
+            score = 1
         else:
             #result is "none", no winner or tie yet
-            turnColour = green if colour == red else red
+            otherColour = green if colour == red else red
 
             #recursive call on new board, with other colour, to find best
             #move for user
-            temp = getBestMove(copy, turnColour)
+            temp = getBestMove(copy, otherColour)
             score = temp[1] * -1
 
-        movesAndScores[move] = score
-
+        if move in movesAndScores:
+            movesAndScores[move] += score
+        else:
+            movesAndScores[move] = score
+            
     return getPlayMove(movesAndScores)
           
 
 """Performs the computer's move"""
 def computerPlay():
     global redTurn
-    move = getBestMove(board, red if redTurn else green)
+
+    colour = red if redTurn else green
+    
+    move = getBestMove(board, colour)
     print("**** computer move:", move)
 
-    board[move[0][0]][move[0][1]] = red if redTurn else green
+    board[move[0][0]][move[0][1]] = colour
     drawBoard(board)
+
+    #computer has made its move, so flip turn
     redTurn = not redTurn
 
     result = ttt.checkForWinner(board)
@@ -256,7 +261,7 @@ if __name__ == "__main__":
     blank = [0,0,0]
     white = [255,255,255]
 
-    # define the Tic Tac Toe grid
+    # define the empty Tic Tac Toe grid
     grid=[blank,blank,white,blank,blank,white,blank,blank,
       blank,blank,white,blank,blank,white,blank,blank,
       white,white,white,white,white,white,white,white,
@@ -267,17 +272,17 @@ if __name__ == "__main__":
       blank,blank,white,blank,blank,white,blank,blank]
 
     # matrix representing the TTT grid
-##    board = [[blank, blank, blank],
-##       [blank, blank, blank],
-##       [blank, blank, blank]]
+    board = [[blank, blank, blank],
+       [blank, blank, blank],
+       [blank, blank, blank]]
         
 ##    board = [[green, green, blank],
 ##           [red, red, blank],
 ##           [green, red, blank]]
 
     board = [[blank, blank, blank],
-	[red, blank, blank],
-	[red, green, green]]
+	[green, blank, blank],
+	[blank, red, blank]]
 
 
     #sense.show_message("Get ready!")
