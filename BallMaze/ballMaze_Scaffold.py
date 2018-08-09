@@ -72,15 +72,29 @@ def die():
 def win():
     """Player wins the game (ball has successfully been moved to the target
     LED"""
-    global ballIsAlive
+    global ballIsAlive, startTime
+
+    #calculate total time taken to complete the maze
+    
     sense.set_pixel(end[0], end[1], ora)
     time.sleep(0.5)
     sense.show_message(text_string="You win", text_colour=[51, 204, 51])
     ballIsAlive = False
 
+    #display time and call saveTime function
+
+
+def saveTime(time):
+    """Saves the given time to the file time.txt if the time
+    is lowest than the current saved for for the current maze."""
+    #read file to get current best time
+    fileName = "times.txt"    
+
+    #complete this function
+
 def play():
     """Plays the game."""
-    global ballIsAlive, ball, start, playAgain
+    global ballIsAlive, ball, start, playAgain, startTime
 
     #countdown to start
     sense.show_letter("3")
@@ -95,6 +109,9 @@ def play():
     ball = list(start)
     sense.set_pixel(ball[0], ball[1], ora)
     sense.set_pixel(end[0], end[1], gre)
+
+    #start timer
+    startTime = time.time()
     
     while ballIsAlive and playAgain:
         print("Ball:", ball)
@@ -119,11 +136,11 @@ def stopLooping(event):
         playAgain = False
         print("playAgain = False")
 
-def readMaze():
+def readMaze(mazeFile):
     """Reads a maze layout, including start and end points from
     a text file."""
     #provide this function in its entirety?
-    mazeFile = open("maze1.txt")
+    mazeFile = open(mazeFile)
     lines = mazeFile.readlines()
     mazeFile.close()
 
@@ -188,7 +205,8 @@ yel = [255,255,0]
 blk = [0,0,0]
 
 #read in maze from file
-start, end, maze = readMaze()
+mazeFileName = "maze3.txt"
+start, end, maze = readMaze(mazeFileName)
 ball = start
 
 #start play

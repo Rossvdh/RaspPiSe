@@ -147,7 +147,6 @@ def saveTime(time):
     """Saves the given time to the file time.txt if the time
     is lowest than the current saved for for the current maze."""
     #read file to get current best time
-    print("time:", time)
     print("opening file")
     fileName = "times.txt"
     file = open(fileName, "r")
@@ -161,6 +160,7 @@ def saveTime(time):
 
     file = open(fileName, "w")
 
+    #write out and update best time if necessary
     for line in lines:
         if line[0] == mazeNumber:
             #extract time
