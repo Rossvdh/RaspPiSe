@@ -89,6 +89,13 @@ def buttonPushed(event):
             else:
                 computerPlay()
 
+def shuffle(lst): #seems ok
+    """Shuffles to array of moves and their scores"""
+    for i in range(len(lst)-1, 0, -1):
+        rand = random.randint(0, i)
+        lst[i], lst[rand] = lst[rand], lst[i]
+    return lst
+
 def playAgain():
     """Restarts the game"""
     global board, redTurn
@@ -130,12 +137,7 @@ def getAvailableMoves(board): #seems ok
 
     return moves
 
-def shuffle(lst): #seems ok
-    """Shuffles to array of moves and their scores"""
-    for i in range(len(lst)-1, 0, -1):
-        rand = random.randint(0, i)
-        lst[i], lst[rand] = lst[rand], lst[i]
-    return lst
+
 
 
 def getPlayMove(moves):
@@ -143,26 +145,15 @@ def getPlayMove(moves):
     where move is a 2-tuple (row, col). Best move is the one with the highest
     score. If there are multiple moves with the same highest score, one is
     chosen randomly."""
-##    print("1. getPlayMove. moves.length:", len(moves))
-##    print("getPlayMove. moves:", moves)
-    lst = list(moves.items()) # list is [((row, col), score), ..]
-
-    #shuffle
-    lst = shuffle(lst)
-
-    #sort descending on score(scaffold) 
-    lst.sort(key=(lambda i : i[1]), reverse=True)
-
-##    print("sorted:", lst)
-    return lst[0]
+    
 
 def getBestMove(board, colour):
     """Returns the best move ((row, col), score) for the given colour on the given board"""
     moves = getAvailableMoves(board)
-    print("Available moves:", moves)
     movesAndScores = {}
 
-    if len(moves) == 1:
+    if len(moves) == 1:#only one available move,
+    #so return immediately (this is the base case)
         #create a copy of the board
         copy = copyBoard(board)
 
@@ -207,8 +198,16 @@ def getBestMove(board, colour):
             movesAndScores[move] += score
         else:
             movesAndScores[move] = score
-            
-    return getPlayMove(movesAndScores)
+
+    lst = list(movesAndScores.items()) # list is [((row, col), score), ..]
+
+    #shuffle
+    lst = shuffle(lst)
+
+    #sort descending on score(scaffold) 
+    lst.sort(key=(lambda i : i[1]), reverse=True)
+    
+    return lst[0]
           
 
 """Performs the computer's move"""
@@ -218,7 +217,6 @@ def computerPlay():
     colour = red if redTurn else green
     
     move = getBestMove(board, colour)
-    print("**** computer move:", move)
 
     board[move[0][0]][move[0][1]] = colour
     drawBoard(board)

@@ -90,6 +90,13 @@ def buttonPushed(event):
                 #no result, so its the computer's turn
                 computerPlay()
 
+def shuffle(lst):
+    """Shuffles the array of moves and their scores"""
+    for i in range(len(lst)-1, 0, -1):
+        rand = random.randint(0, i)
+        lst[i], lst[rand] = lst[rand], lst[i]
+    return lst
+
 def playAgain():
     """Restarts the game"""
     global board, redTurn
@@ -107,7 +114,11 @@ def playAgain():
 
 def drawBoard(board):
     """Draws the board on the LED matrix"""
-    pass
+    #Task 1: complete this function
+    for row in range(3):
+        for col in range(3):
+            colourSquare(board[col][row], row*3, col*3)
+##    pass
 
 def copyBoard(board):
     """Creates a copy of the given board"""
@@ -115,86 +126,29 @@ def copyBoard(board):
 
 def getAvailableMoves(board):
     """"Returns a list [(row, col), ...] of blank grid sqaures"""
-    pass
+    #Task 3: complete this function
+    moves = []
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == blank:
+                moves.append((row, col))
 
-def shuffle(lst):
-    """Shuffles the array of moves and their scores"""
-    for i in range(len(lst)-1, 0, -1):
-        rand = random.randint(0, i)
-        lst[i], lst[rand] = lst[rand], lst[i]
-    return lst
+    return moves
 
-
-def getPlayMove(moves):
-    """Returns the best move from the given dict[move]=score
-    where move is a 2-tuple (row, col). Best move is the one with the highest
-    score. If there are multiple moves with the same highest score, one is
-    chosen randomly."""
-    #scaffold? Or maybe remove completely and put the code directly in getBestMove?
-    lst = list(moves.items()) # list is [((row, col), score), ..]
-
-    #shuffle
-    lst = shuffle(lst)
-
-    #sort descending on score(scaffold) 
-    lst.sort(key=(lambda i : i[1]), reverse=True)
-
-    return lst[0]
 
 def getBestMove(board, colour):
     """Returns the best move ((row, col), score) for the given colour on the given board"""
-    #scaffold
+    #random move
+##    row = random.randint(0,2)
+##    col = random.randint(0,2)
+##
+##    return (row, col)
+
+    #Task 3: remove the above code, call getAvailableMoves and choose one
     moves = getAvailableMoves(board)
-    print("Available moves:", moves)
-    movesAndScores = {}
+    return random.choice(moves)
 
-    if len(moves) == 1:
-        #create a copy of the board
-        copy = copyBoard(board)
-
-        #apply an available move to the board
-        copy[moves[0][0]][moves[0][1]] = colour
-
-        #see what happens
-        result = ttt.checkForWinner(copy)
-
-        if result == "red" or result == "green":
-            movesAndScores[moves[0]] = 10
-            return (moves[0], 10)
-        else:
-            movesAndScores[moves[0]] = 0
-            return (moves[0], 0)
-
-    for move in moves:
-        #create a copy of the board
-        copy = copyBoard(board)
-
-        #apply an available move to the board
-        copy[move[0]][move[1]] = colour
-
-        #see what happens
-        result = ttt.checkForWinner(copy)
-        score = 0
-        if result == "red" or result == "green":
-            score = 10
-            return (move, 10)
-        elif result == "tie":
-            score = 1
-        else:
-            #result is "none", no winner or tie yet
-            otherColour = green if colour == red else red
-
-            #recursive call on new board, with other colour, to find best
-            #move for user
-            temp = getBestMove(copy, otherColour)
-            score = temp[1] * -1
-
-        if move in movesAndScores:
-            movesAndScores[move] += score
-        else:
-            movesAndScores[move] = score
-            
-    return getPlayMove(movesAndScores)
+    #Task 4: complete this function
           
 
 """Performs the computer's move"""
@@ -205,9 +159,9 @@ def computerPlay():
     colour = red if redTurn else green
     
     move = getBestMove(board, colour)
-    print("**** computer move:", move)
 
-    board[move[0][0]][move[0][1]] = colour
+    #Task 2: complete this function
+    board[move[0]][move[1]] = colour
     drawBoard(board)
 
     #computer has made its move, so flip turn
@@ -225,6 +179,7 @@ def computerPlay():
         playAgain()
     #else:
         #wait for joystick event
+    
 
 # MAIN-------------------------------------------------
 if __name__ == "__main__": #remove?
