@@ -87,6 +87,7 @@ def buttonPushed(event):
                 sense.show_message("Tie")
                 playAgain()
             else:
+                #no result, so its the computer's turn
                 computerPlay()
 
 def playAgain():
@@ -98,40 +99,26 @@ def playAgain():
     sense.set_pixel(marker[0], marker[1], blue)
 
     board = [[blank, blank, blank],
-    [green, blank, blank],
-    [blank, red, blank]]
+    [blank, blank, blank],
+    [blank, blank, blank]]
 
     drawBoard(board)
 
-"""Draws the board on the LED matrix"""
+
 def drawBoard(board):
-    for row in range(3):
-        for col in range(3):
-            colourSquare(board[col][row], row*3, col*3)
+    """Draws the board on the LED matrix"""
+    pass
 
-def copyBoard(board): #seems ok
+def copyBoard(board):
     """Creates a copy of the given board"""
-    copy = []
-    for row in board:
-        newRow = []
-        for col in row:
-            newRow.append(list(col))
-        copy.append(newRow)
+    pass
 
-    return copy
+def getAvailableMoves(board):
+    """"Returns a list [(row, col), ...] of blank grid sqaures"""
+    pass
 
-def getAvailableMoves(board): #seems ok
-    """"Returns a list of blank grid sqaures"""
-    moves = []
-    for row in range(3):
-        for col in range(3):
-            if board[row][col] == blank:
-                moves.append((row, col))
-
-    return moves
-
-def shuffle(lst): #seems ok
-    """Shuffles to array of moves and their scores"""
+def shuffle(lst):
+    """Shuffles the array of moves and their scores"""
     for i in range(len(lst)-1, 0, -1):
         rand = random.randint(0, i)
         lst[i], lst[rand] = lst[rand], lst[i]
@@ -143,8 +130,7 @@ def getPlayMove(moves):
     where move is a 2-tuple (row, col). Best move is the one with the highest
     score. If there are multiple moves with the same highest score, one is
     chosen randomly."""
-##    print("1. getPlayMove. moves.length:", len(moves))
-##    print("getPlayMove. moves:", moves)
+    #scaffold? Or maybe remove completely and put the code directly in getBestMove?
     lst = list(moves.items()) # list is [((row, col), score), ..]
 
     #shuffle
@@ -153,11 +139,11 @@ def getPlayMove(moves):
     #sort descending on score(scaffold) 
     lst.sort(key=(lambda i : i[1]), reverse=True)
 
-##    print("sorted:", lst)
     return lst[0]
 
 def getBestMove(board, colour):
     """Returns the best move ((row, col), score) for the given colour on the given board"""
+    #scaffold
     moves = getAvailableMoves(board)
     print("Available moves:", moves)
     movesAndScores = {}
@@ -213,6 +199,7 @@ def getBestMove(board, colour):
 
 """Performs the computer's move"""
 def computerPlay():
+    #scaffold
     global redTurn
 
     colour = red if redTurn else green
@@ -240,7 +227,7 @@ def computerPlay():
         #wait for joystick event
 
 # MAIN-------------------------------------------------
-if __name__ == "__main__":
+if __name__ == "__main__": #remove?
     # set up sense hat
     sense = sense_hat.SenseHat()
     sense.low_light = True
@@ -252,7 +239,6 @@ if __name__ == "__main__":
     sense.stick.direction_left = pushed_left
     sense.stick.direction_right = pushed_right
     sense.stick.direction_middle = buttonPushed
-    #~ sense.stick.direction_any = checkWinner
 
     #define some colours
     red = [255,0,0]
@@ -275,14 +261,6 @@ if __name__ == "__main__":
     board = [[blank, blank, blank],
        [blank, blank, blank],
        [blank, blank, blank]]
-        
-##    board = [[green, green, blank],
-##           [red, red, blank],
-##           [green, red, blank]]
-
-    board = [[blank, blank, blank],
-	[green, blank, blank],
-	[blank, red, blank]]
 
 
     #sense.show_message("Get ready!")
