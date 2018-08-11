@@ -1,7 +1,5 @@
-# Implementing Snake game on SenseHat
-# UCT Computer Science CSC4000W RaspPiSe project
-# Ross van der Heyde
-# 2 July 2018
+# Scaffolding code for Snake game on SenseHat
+# 11 August 2018
 
 import sense_hat
 import time
@@ -12,42 +10,50 @@ import SnakeClass
 def up(event):
     """When the joystick is pushed up, change the snake's direction
     of movement to upwards"""
+    # Task 2: implement this function
     pass
 
 def down(event):
     """When the joystick is pushed down, change the snake's direction
     of movement to downwards"""
+    # Task 2: implement this function
     pass
         
 def right(event):
     """When the joystick is pushed right, change the snake's direction
     of movement to the right"""
+    # Task 2: implement this function
     pass
 
 def left(event):
     """When the joystick is pushed left, change the snake's direction
     of movement to the left"""
+    # Task 2: implement this function
     pass
 
 def stopGame(event):
     """When the middle joystick button is pressed, stop the game"""
+    # Task 5: implement this function
     pass
 
 def generateFood():
     """Places the food (target LED) on a random LED in the matrix
     that is not in the snake"""
+    # Task 3: rewrite this function
     return [4,5]
 
-def updateMatrix():
+def updateMatrix(food, snake):
     """Draws the snake and food in the new positions on the LED matrix"""
-    pass
+    #pass
+    # Task 1: display the foodand the snake on the LED matrix
 
 def die():
     """When the snake dies by going off the grid or into itself"""
+    # Task 4: implement this function
     pass
     
 
-#MAIN
+# MAIN ----------------------------------------------------------------
 #set up the senseHat stuff
 sense = sense_hat.SenseHat()
 sense.low_light = True
@@ -88,7 +94,7 @@ while playAgain:
 
     #start game play
     while alive:
-        updateMatrix()
+        updateMatrix(food, snake)
         result = snake.slither(food)
         if result == "eat":
             print("eat")

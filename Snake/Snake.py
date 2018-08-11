@@ -43,7 +43,6 @@ def stopGame(event):
 def generateFood():
     """Places the food (target LED) on a random LED in the matrix
     that is not in the snake"""
-    #good scaffold candidate
     temp = [random.randint(0,7), random.randint(0,7)]
 
     snakePixels = snake.getPixels()
@@ -54,9 +53,8 @@ def generateFood():
 
     return temp
 
-def updateMatrix():
+def updateMatrix(food, snake):
     """Draws the snake and food in the new positions on the LED matrix"""
-    #good scaffold candidate
     # draw food
     sense.clear()
     sense.set_pixel(food[0], food[1], gre)
@@ -82,7 +80,6 @@ def updateMatrix():
 
 def die():
     """When the snake dies by going off the grid or into itself"""
-    #scaffold candidate
     global alive
     alive = False
     sense.show_message("You died", text_colour=[255,51,0])
@@ -129,7 +126,7 @@ while playAgain:
 
     #start game play
     while alive:
-        updateMatrix()
+        updateMatrix(food, snake)
         result = snake.slither(food)
         if result == "eat":
             print("eat")

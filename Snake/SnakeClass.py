@@ -75,6 +75,8 @@ class SnakeClass:
         """Changes the direction of the Snake's movement"""
         if self.direction == SnakeClass.UP:
             if newDirec != SnakeClass.DOWN:
+                #Check that the snake is not going back on itself
+                # (if its going down, it can't change directly to going up)
                 self.direction = newDirec
                 self.turningPoints[self.head()] = self.direction
         elif self.direction == SnakeClass.RIGHT:
