@@ -104,9 +104,10 @@ def playAgain():
     sense.set_pixels(grid)
     sense.set_pixel(marker[0], marker[1], blue)
 
+    #reset board
     board = [[blank, blank, blank],
-    [green, blank, blank],
-    [blank, red, blank]]
+    [blank, blank, blank],
+    [blank, blank, blank]]
 
     drawBoard(board)
 
@@ -136,8 +137,6 @@ def getAvailableMoves(board): #seems ok
                 moves.append((row, col))
 
     return moves
-
-
 
 
 def getPlayMove(moves):
@@ -202,7 +201,7 @@ def getBestMove(board, colour):
     lst = list(movesAndScores.items()) # list is [((row, col), score), ..]
 
     #shuffle
-    lst = shuffle(lst)
+    #lst = shuffle(lst)
 
     #sort descending on score(scaffold) 
     lst.sort(key=(lambda i : i[1]), reverse=True)
@@ -273,14 +272,6 @@ if __name__ == "__main__":
     board = [[blank, blank, blank],
        [blank, blank, blank],
        [blank, blank, blank]]
-        
-##    board = [[green, green, blank],
-##           [red, red, blank],
-##           [green, red, blank]]
-
-    board = [[blank, blank, blank],
-	[green, blank, blank],
-	[blank, red, blank]]
 
 
     #sense.show_message("Get ready!")

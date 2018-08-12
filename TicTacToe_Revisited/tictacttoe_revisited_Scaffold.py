@@ -145,10 +145,11 @@ def getBestMove(board, colour):
 ##    return (row, col)
 
     #Task 3: remove the above code, call getAvailableMoves and choose one
-    moves = getAvailableMoves(board)
-    return random.choice(moves)
+##    moves = getAvailableMoves(board)
+##    return random.choice(moves)
 
-    #Task 4: complete this function
+    #Task 4: rewrite this function
+    
           
 
 """Performs the computer's move"""
