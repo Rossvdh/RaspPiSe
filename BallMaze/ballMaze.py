@@ -7,6 +7,7 @@ import sense_hat
 from sense_hat import ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 import time
 from signal import pause
+import bm
 
 def moveBallUp():
     """Move ball one LED towards the top of the matrix"""
@@ -111,16 +112,20 @@ def moveBallLeft():
 def getMoveType(ball):
     """Determines if the move is legal, into a wall, or results in
     a death or a win"""
-    #also a good candidate for if statment assignment
     if not(0<= ball[0] <=7 and 0<= ball[1] <=7):
+        print("DIE")
         return DIE #out of bounds. you die
     elif maze[8*ball[1] + ball[0]] == red:
+        print("HOLE")
         return HOLE #move into hole. you die
     elif maze[8*ball[1] + ball[0]] == blu:
+        print("WALL")
         return WALL #move into wall. you can't move
     elif ball == end:
+        print("WIN")
         return WIN #win
     else:
+        print("LEGAL")
         return LEGAL #normal legal move
 
 def die():
@@ -140,43 +145,9 @@ def win():
     time.sleep(0.5)
     sense.show_message(text_string="You win", text_colour=[51, 204, 51])
     sense.show_message("Time: "+ str(totalTime)+" s")
-    saveTime(totalTime)
+    bm.saveTime(totalTime, mazeFileName)
     ballIsAlive = False
-
-def saveTime(time):
-    """Saves the given time to the file time.txt if the time
-    is lowest than the current saved for for the current maze."""
-    #read file to get current best time
-    print("opening file")
-    fileName = "times.txt"
-    file = open(fileName, "r")
-
-    lines = file.readlines()
-    file.close()
-    print("file read")
-    
-    mazeNumber = mazeFileName[4]
-    print("mazeNumber =", mazeNumber)
-
-    file = open(fileName, "w")
-
-    #write out and update best time if necessary
-    for line in lines:
-        if line[0] == mazeNumber:
-            #extract time
-            bestTime = float(line[3:-1])
-            print("best time:", bestTime)
-
-            if time < bestTime:
-                print(mazeNumber+": " + str(time)+"\n", file=file, end="")
-            else:
-                print(line, file=file, end="")
-        else:
-            print(line, file=file, end="")
-
-    file.close()
-    print("writing complete")
-        
+ 
 
 def play():
     """Plays the game."""
@@ -206,7 +177,6 @@ def play():
         #read left/right angle, move ball accordingly
         gyro = sense.get_orientation_degrees()
         pitch = gyro["pitch"]
-        #these ifs also for assignment?
         if 185 < pitch < 355:
             moveBallLeft()
         elif 5 < pitch < 175:
@@ -222,56 +192,13 @@ def play():
                 moveBallUp()
 
 
-
 def stopLooping(event):
-    """When the user press the joystick middle button, stop starting
-    a new game"""
+    """When the user presses the joystick middle button, stop starting
+    a new game after the previous game ends"""
     if event.action == ACTION_RELEASED:
         global playAgain
         playAgain = False
         print("playAgain = False")
-
-def readMaze(mazeFile):
-    """Reads a maze layout, including start and end points from
-    a text file."""
-    #provide this function in its entirety?
-    mazeFile = open(mazeFile)
-    lines = mazeFile.readlines()
-    mazeFile.close()
-
-    #strip \n
-    for i in range(len(lines)):
-        lines[i] = lines[i].strip("\n")
-
-    #extract start position
-    start = lines[0].split(",")
-    start = list(map(int, start))
-    del lines[0]
-
-    #extract end position
-    end = lines[0].split(",")
-    end = list(map(int, end))
-    del lines[0]
-
-    #extract maze layout
-    maze = []
-    for line in lines:
-        arr = line.split(" ")
-        for i in arr:
-            if i == "b":
-                #blank LED
-                maze.append(blk)
-            elif i == "w":
-                #wall
-                maze.append(blu)
-            elif i == "h":
-                #h for hole
-                maze.append(red)
-            else:
-                #target LED
-                maze.append(gre)
-
-    return start, end, maze
 
 
 #-----------------------------------------------------
@@ -293,7 +220,7 @@ blk = [0,0,0]
 
 #read in maze from file
 mazeFileName = "maze3.txt"
-start, end, maze = readMaze(mazeFileName)
+start, end, maze = bm.readMaze(mazeFileName)
 ball = start
 
 #set up senseHat
@@ -310,7 +237,7 @@ while playAgain:
     play()
 
 sense.clear()
-print("end end")
+print("end")
 
 
 

@@ -9,6 +9,7 @@ import sense_hat
 from sense_hat import ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 import time
 from signal import pause
+import bm
 
 def moveBallUp():
     """Move ball one LED towards the top of the matrix"""
@@ -19,10 +20,9 @@ def moveBallUp():
     ball[1] = ball[1] + 1
 
     # Task 4: get the type of move and perform the appropriate action(s)
+    move = getMoveType(ball)
     
     sense.set_pixel(ball[0], ball[1], ora)
-
-    
         
 def moveBallDown():
     """Move ball one LED towards the bottom of the matrix"""
@@ -31,6 +31,7 @@ def moveBallDown():
     ball[1] = ball[1] - 1
 
     # Task 4: get the type of move and perform the appropriate action(s)
+    move = getMoveType(ball)
     
     sense.set_pixel(ball[0], ball[1], ora)
 
@@ -41,7 +42,7 @@ def moveBallRight():
     ball[0] = ball[0] - 1
 
     # Task 4: get the type of move and perform the appropriate action(s)
-    
+    move = getMoveType(ball)
     sense.set_pixel(ball[0], ball[1], ora)
 
 def moveBallLeft():
@@ -51,6 +52,7 @@ def moveBallLeft():
     ball[0] = ball[0] + 1
 
     # Task 4: get the type of move and perform the appropriate action(s)
+    move = getMoveType(ball)
     
     sense.set_pixel(ball[0], ball[1], ora)
 
@@ -60,6 +62,7 @@ def getMoveType(ball):
     a death or a win"""
     # Task 3: complete this method
     pass
+    
 
 def die():
     """Ends the game (player looses because they fell off the grid
@@ -73,24 +76,14 @@ def win():
     """Player wins the game (ball has successfully been moved to the target
     LED"""
     global ballIsAlive, startTime
-
-    #calculate total time taken to complete the maze
-    
+    totalTime = round(time.time() - startTime, 2)
     sense.set_pixel(end[0], end[1], ora)
     time.sleep(0.5)
     sense.show_message(text_string="You win", text_colour=[51, 204, 51])
+    sense.show_message("Time: "+ str(totalTime)+" s")
+    bm.saveTime(totalTime, mazeFileName)
     ballIsAlive = False
 
-    #display time and call saveTime function
-
-
-def saveTime(time):
-    """Saves the given time to the file time.txt if the time
-    is lowest than the current saved for for the current maze."""
-    #read file to get current best time
-    fileName = "times.txt"    
-
-    #complete this function
 
 def play():
     """Plays the game."""
@@ -136,48 +129,6 @@ def stopLooping(event):
         playAgain = False
         print("playAgain = False")
 
-def readMaze(mazeFile):
-    """Reads a maze layout, including start and end points from
-    a text file."""
-    #provide this function in its entirety?
-    mazeFile = open(mazeFile)
-    lines = mazeFile.readlines()
-    mazeFile.close()
-
-    #strip \n
-    for i in range(len(lines)):
-        lines[i] = lines[i].strip("\n")
-
-    #extract start position
-    start = lines[0].split(",")
-    start = list(map(int, start))
-    del lines[0]
-
-    #extract end position
-    end = lines[0].split(",")
-    end = list(map(int, end))
-    del lines[0]
-
-    #extract maze layout
-    maze = []
-    for line in lines:
-        arr = line.split(" ")
-        for i in arr:
-            if i == "b":
-                #blank LED
-                maze.append(blk)
-            elif i == "w":
-                #wall
-                maze.append(blu)
-            elif i == "h":
-                #h for hole
-                maze.append(red)
-            else:
-                #target LED
-                maze.append(gre)
-
-    return start, end, maze
-
 
 #-----------------------------------------------------
 #MAIN
@@ -205,8 +156,8 @@ yel = [255,255,0]
 blk = [0,0,0]
 
 #read in maze from file
-mazeFileName = "maze3.txt"
-start, end, maze = readMaze(mazeFileName)
+mazeFileName = "maze1.txt"
+start, end, maze = bm.readMaze(mazeFileName)
 ball = start
 
 #start play
