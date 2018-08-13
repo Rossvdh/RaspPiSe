@@ -15,6 +15,7 @@ import ttt
 # row and col are the co-ords of the LED in the top left corner of the ttt
 # grid square
 def colourSquare(colour, col, row):
+    """Fills the grid square at the co-ords with the given colour"""
     row = int(row)#row and col might be floats
     col = int(col)
     sense.set_pixel(col, row, colour)
@@ -61,8 +62,6 @@ def pushed_right(event):
 def buttonPushed(event):
     """What happens when the joystick button is pushed. The square is 
     coloured with the appropriate colour"""
-    # update board matrix
-    #draw board on LEDs
     global redTurn
     if event.action == ACTION_RELEASED:
         #print("redTurn: ",redTurn,"x:", red,"marker[0]:",marker[0], ". marker[1]:",marker[1])
@@ -126,27 +125,18 @@ def copyBoard(board):
 
 def getAvailableMoves(board):
     """"Returns a list [(row, col), ...] of blank grid sqaures"""
-    #Task 3: complete this function
-    moves = []
-    for row in range(3):
-        for col in range(3):
-            if board[row][col] == blank:
-                moves.append((row, col))
-
-    return moves
+    #Task 1: complete this function
 
 
 def getBestMove(board, colour):
     """Returns the best move ((row, col), score) for the given colour on the given board"""
     #random move
-##    row = random.randint(0,2)
-##    col = random.randint(0,2)
-##
-##    return (row, col)
+    row = random.randint(0,2)
+    col = random.randint(0,2)
+
+    return (row, col)
 
     #Task 3: remove the above code, call getAvailableMoves and choose one
-##    moves = getAvailableMoves(board)
-##    return random.choice(moves)
 
     #Task 4: rewrite this function
     
@@ -162,24 +152,6 @@ def computerPlay():
     move = getBestMove(board, colour)
 
     #Task 2: complete this function
-    board[move[0]][move[1]] = colour
-    drawBoard(board)
-
-    #computer has made its move, so flip turn
-    redTurn = not redTurn
-
-    result = ttt.checkForWinner(board)
-    if result == "red":
-        sense.show_message("Red wins")
-        playAgain()
-    elif result == "green":
-        sense.show_message("Green wins")
-        playAgain()
-    elif result == "tie":
-        sense.show_message("Tie")
-        playAgain()
-    #else:
-        #wait for joystick event
     
 
 # MAIN-------------------------------------------------
