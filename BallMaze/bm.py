@@ -3,6 +3,8 @@
 # UNiversity of Cape Town Computer Science Honours
 # 13 August 2018
 
+# REVISED ASSIGNMENT
+
 blu = [0,0,255]
 red = [255,0,0]
 gre = [0,255,0]
@@ -58,16 +60,16 @@ def saveTime(time, mazeFileName):
     """Saves the given time to the file time.txt if the time
     is lowest than the current saved for for the current maze."""
     #read file to get current best time
-    print("opening file")
+##    print("opening file")
     fileName = "times.txt"
     file = open(fileName, "r")
 
     lines = file.readlines()
     file.close()
-    print("file read")
+##    print("file read")
     
     mazeNumber = mazeFileName[4]
-    print("mazeNumber =", mazeNumber)
+##    print("mazeNumber =", mazeNumber)
 
     file = open(fileName, "w")
 
@@ -76,7 +78,7 @@ def saveTime(time, mazeFileName):
         if line[0] == mazeNumber:
             #extract time
             bestTime = float(line[3:-1])
-            print("best time:", bestTime)
+##            print("best time:", bestTime)
 
             if time < bestTime:
                 print(mazeNumber+": " + str(time)+"\n", file=file, end="")
