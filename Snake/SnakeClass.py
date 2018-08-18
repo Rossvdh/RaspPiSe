@@ -3,6 +3,8 @@
 # UCT Computer Science Honours
 # 17 July 2018
 
+# REVISED ASSIGNMENT
+
 class SnakeClass:
     #class Attributes
     UP = 0

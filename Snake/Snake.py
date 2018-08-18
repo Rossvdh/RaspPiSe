@@ -3,11 +3,24 @@
 # Ross van der Heyde
 # 2 July 2018
 
+# REVISED ASSIGNMENT
+
 import sense_hat
 import time
 import random
 import SnakeClass
 
+#define some colours
+blue = [0,0,255]
+red = [255,0,0]
+green = [0,255,0]
+blank = [0,0,0]
+
+# direction constants
+UP = 0
+RIGHT = 1
+DOWN = 2
+LEFT = 3
 
 def up(event):
     """When the joystick is pushed up, change the snake's direction
@@ -55,15 +68,12 @@ def generateFood():
 
 def updateMatrix(food, snake):
     """Draws the snake and food in the new positions on the LED matrix"""
-    # draw food
     sense.clear()
-    sense.set_pixel(food[0], food[1], gre)
-
     # draw snake
     snakePixels = snake.getPixels()
     for pixel in snakePixels:
         if 0 <= pixel[0] <= 7 and 0 <= pixel[1] <= 7:
-            sense.set_pixel(pixel[0], pixel[1], blu)
+            sense.set_pixel(pixel[0], pixel[1], blue)
         else:
             die()
             return
@@ -72,10 +82,13 @@ def updateMatrix(food, snake):
     for i in range(2):
         x = snake.head()[0]
         y = snake.head()[1]
-        sense.set_pixel(x, y, blk)
+        sense.set_pixel(x, y, blank)
         time.sleep(0.1)
-        sense.set_pixel(x, y, blu)
+        sense.set_pixel(x, y, blue)
         time.sleep(0.1)
+
+    # draw food
+    sense.set_pixel(food[0], food[1], green)
 
 
 def die():
@@ -83,32 +96,19 @@ def die():
     global alive
     alive = False
     sense.show_message("You died", text_colour=[255,51,0])
-    sense.show_message("Final length: "+ str(snake.getLength()))
+##    sense.show_message("Final length: "+ str(snake.getLength()))
 
 #MAIN
 #set up the senseHat stuff
 sense = sense_hat.SenseHat()
-#sense.low_light = True
 sense.stick.direction_down = down
 sense.stick.direction_up = up
 sense.stick.direction_left = left
 sense.stick.direction_right = right
 sense.stick.direction_middle = stopGame
-blu = [0,0,255]
-red = [255,0,0]
-gre = [0,255,0]
-whi = [255,255,255]
-ora = [255,200,0]
-yel = [255,255,0]
-blk = [0,0,0]
 
-# direction constants
-UP = 0
-RIGHT = 1
-DOWN = 2
-LEFT = 3
 
-playAgain = True
+playAgain = True #we want to play again after dying
 
 while playAgain:
     snake = SnakeClass.SnakeClass()
@@ -125,7 +125,7 @@ while playAgain:
     food = generateFood()
 
     #start game play
-    while alive:
+    while alive: #while snake is alive, keep moving and updating the matrix
         updateMatrix(food, snake)
         result = snake.slither(food)
         if result == "eat":

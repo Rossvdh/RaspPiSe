@@ -1,11 +1,24 @@
 # Scaffolding code for Snake game on SenseHat
 # 11 August 2018
 
+# REVISED ASSIGNMENT
+
 import sense_hat
 import time
 import random
 import SnakeClass
 
+#define some colours
+blue = [0,0,255]
+red = [255,0,0]
+green = [0,255,0]
+blank = [0,0,0]
+
+# direction constants
+UP = 0
+RIGHT = 1
+DOWN = 2
+LEFT = 3
 
 def up(event):
     """When the joystick is pushed up, change the snake's direction
@@ -28,8 +41,8 @@ def right(event):
 def left(event):
     """When the joystick is pushed left, change the snake's direction
     of movement to the left"""
-    # Task 2: implement this function
-    pass
+    if event.action == sense_hat.ACTION_RELEASED:
+        snake.changeDirection(LEFT)
 
 def stopGame(event):
     """When the middle joystick button is pressed, stop the game"""
@@ -44,11 +57,33 @@ def generateFood():
 
 def updateMatrix(food, snake):
     """Draws the snake and food in the new positions on the LED matrix"""
-    #pass
-    # Task 1: display the foodand the snake on the LED matrix
+    sense.clear()
+    # draw snake
+    snakePixels = snake.getPixels()
+    for pixel in snakePixels:
+        if 0 <= pixel[0] <= 7 and 0 <= pixel[1] <= 7:
+            sense.set_pixel(pixel[0], pixel[1], blu)
+        else:
+            die()
+            return
+
+    # blink snake's head
+    for i in range(2):
+        x = snake.head()[0]
+        y = snake.head()[1]
+        sense.set_pixel(x, y, blk)
+        time.sleep(0.1)
+        sense.set_pixel(x, y, blu)
+        time.sleep(0.1)
+        
+    # Task 1: Add some code here to display the food on the LED matrix
+    # food is a list with 2 elements: the first is the x co-ordinate (column)
+    # on the LED matrix and the second is the y co-ordinate (row)
+    sense.set_pixel(food[0], food[1], green)
 
 def die():
     """When the snake dies by going off the grid or into itself"""
+    global alive
     # Task 4: implement this function
     pass
     
@@ -62,21 +97,8 @@ sense.stick.direction_up = up
 sense.stick.direction_left = left
 sense.stick.direction_right = right
 sense.stick.direction_middle = stopGame
-blu = [0,0,255]
-red = [255,0,0]
-gre = [0,255,0]
-whi = [255,255,255]
-ora = [255,200,0]
-yel = [255,255,0]
-blk = [0,0,0]
 
-# direction constants
-UP = 0
-RIGHT = 1
-DOWN = 2
-LEFT = 3
-
-playAgain = True
+playAgain = True #we want to play again after dying
 
 while playAgain:
     snake = SnakeClass.SnakeClass()
@@ -93,7 +115,7 @@ while playAgain:
     food = generateFood()
 
     #start game play
-    while alive:
+    while alive: #while snake is alive, keep moving and updating the matrix
         updateMatrix(food, snake)
         result = snake.slither(food)
         if result == "eat":
