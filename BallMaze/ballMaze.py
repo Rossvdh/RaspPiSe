@@ -219,7 +219,7 @@ yel = [255,255,0]
 blk = [0,0,0]
 
 #read in maze from file
-mazeFileName = "maze3.txt"
+mazeFileName = "maze1.txt"
 start, end, maze = bm.readMaze(mazeFileName)
 ball = start
 

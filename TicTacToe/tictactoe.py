@@ -14,12 +14,12 @@ import ttt
 # corresponding to red, green and blue
 # row and col are the co-ords of the grid i.e. 0 - 2
 def colourSquare(colour, col, row):
-  row = int(row)#row and col might be floats
-  col = int(col)
-  sense.set_pixel(col, row, colour)
-  sense.set_pixel(col+1, row, colour)
-  sense.set_pixel(col, row+1, colour)
-  sense.set_pixel(col+1, row+1, colour)
+    row = int(row)#row and col might be floats
+    col = int(col)
+    sense.set_pixel(col, row, colour)
+    sense.set_pixel(col+1, row, colour)
+    sense.set_pixel(col, row+1, colour)
+    sense.set_pixel(col+1, row+1, colour)
 
 
 def pushed_up(event):
@@ -76,10 +76,10 @@ def buttonPushed(event):
 
 
 def playAgain():
-  """Restarts the game"""
-  time.sleep(0.5)
-  sense.set_pixels(grid)
-  sense.set_pixel(marker[0], marker[1], blue)
+    """Restarts the game"""
+    time.sleep(0.5)
+    sense.set_pixels(grid)
+    sense.set_pixel(marker[0], marker[1], blue)
 
 # MAIN ---------------------------------------------------------
 # set up Sense Hat
