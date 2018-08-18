@@ -3,6 +3,8 @@
 # University of Cape Town Computer Science Honours
 # 11 August 2018
 
+#THIS IS THE REVISED ASSIGNMENT
+
 import sense_hat
 import time
 
@@ -14,6 +16,13 @@ blue = [0,0,255]
 blank = [0,0,0]
 
 sense = sense_hat.SenseHat()
+
+def set_up_sense_hat():
+    """Creates a SenseHat instance, sets the configuration, and returns
+    the instance"""
+    sense = sense_hat.SenseHat()
+    sense.low_light = True
+    return sense
 
 def isWinningRow():
     """Check if a player has won on a row (i.e. there is a row that is 
