@@ -11,57 +11,127 @@ import time
 from signal import pause
 import bm
 
+# define move types
+DIE = -2
+HOLE = -1
+WALL = 0
+LEGAL = 1
+WIN = 2
+    
+# define some colours
+blu = [0,0,255]
+red = [255,0,0]
+gre = [0,255,0]
+whi = [255,255,255]
+ora = [255,200,0]
+yel = [255,255,0]
+blk = [0,0,0]
+
+
 def moveBallUp():
     """Move ball one LED towards the top of the matrix"""
-    # set LED at ball's previous position to off 
+    #the move ball methodss look like good candidates for an if statement
+    #assignment. Downside is they are all basically the same
+    #set previous current position of the ball to blank LED
     sense.set_pixel(ball[0], ball[1], [0,0,0])
 
-    #set ball's new position
+    #set ball's new position, but do not set LED yet
     ball[1] = ball[1] + 1
-
-    # Task 4: get the type of move and perform the appropriate action(s)
-    move = getMoveType(ball)
     
-    sense.set_pixel(ball[0], ball[1], ora)
+    #test for type of move
+    move = getMoveType(ball)
+    if move == LEGAL:
+        # legal move, so set LED of the ball's new position
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == WALL:
+        #move into wall
+        #set ball's position back to current
+        ball[1] = ball[1] - 1
+        #set LED
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they move into the
+        # hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
+    elif move == DIE:
+        die()
+    else:
+        win()
         
 def moveBallDown():
     """Move ball one LED towards the bottom of the matrix"""
     sense.set_pixel(ball[0], ball[1], [0,0,0])
-    
     ball[1] = ball[1] - 1
 
-    # Task 4: get the type of move and perform the appropriate action(s)
+    #test for type of move
     move = getMoveType(ball)
-    
-    sense.set_pixel(ball[0], ball[1], ora)
+    if move == LEGAL:
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == WALL:
+        ball[1] = ball[1] + 1
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
+    elif move == DIE:
+        die()
+    else:
+        win()
 
 def moveBallRight():
     """Move ball one LED to the right of the matrix"""
     sense.set_pixel(ball[0], ball[1], [0,0,0])
-    
     ball[0] = ball[0] - 1
 
-    # Task 4: get the type of move and perform the appropriate action(s)
+    #test for type of move
     move = getMoveType(ball)
-    sense.set_pixel(ball[0], ball[1], ora)
+    if move == LEGAL:
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == WALL:
+        ball[0] = ball[0] + 1
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
+    elif move == DIE:
+        die()
+    else:
+        win()
 
 def moveBallLeft():
     """Move ball one LED to the left of the matrix"""
     sense.set_pixel(ball[0], ball[1], [0,0,0])
-
     ball[0] = ball[0] + 1
-
-    # Task 4: get the type of move and perform the appropriate action(s)
-    move = getMoveType(ball)
     
-    sense.set_pixel(ball[0], ball[1], ora)
+    #test for type of move
+    move = getMoveType(ball)
+    if move == LEGAL:
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == WALL:
+        ball[0] = ball[0] - 1
+        sense.set_pixel(ball[0], ball[1], ora)
+    elif move == HOLE:
+        #if move into hole, let the user see they moveinto the hole before dying
+        sense.set_pixel(ball[0], ball[1], [255,100,0])
+        time.sleep(0.2)
+        die()
+    elif move == DIE:
+        die()
+    else:
+        win()
 
 
 def getMoveType(ball):
     """Determines if the move is legal, into a wall, or results in
     a death or a win"""
-    # Task 3: complete this method
-    pass
+    # Task 2: rewrite this function
+    return LEGAL
     
 
 def die():
@@ -108,18 +178,22 @@ def play():
     
     while ballIsAlive and playAgain:
         print("Ball:", ball)
-        time.sleep(0.4)
+        time.sleep(0.1)
 
         #read pitch, move ball accordingly
         gyro = sense.get_orientation_degrees()
         pitch = gyro["pitch"]
         
-        #Task 1: move the ball left or right depending on the pitch angle
-        
+        # move the ball left or right depending on the pitch angle
+        gyro = sense.get_orientation_degrees()
+        pitch = gyro["pitch"]
+        if 185 < pitch < 355:
+            moveBallLeft()
+        elif 5 < pitch < 175:
+            moveBallRight()
         
         if ballIsAlive:
-            #Task 2: read roll angle, move ball up or down
-            pass
+            #Task 1: read roll angle, move ball up or down
 
 def stopLooping(event):
     """When the user press the joystick middle button, stop starting
