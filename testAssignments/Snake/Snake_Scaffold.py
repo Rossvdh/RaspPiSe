@@ -21,43 +21,6 @@ RIGHT = 1
 DOWN = 2
 LEFT = 3
 
-def up(event):
-    """When the joystick is pushed up, change the snake's direction
-    of movement to upwards"""
-    # Task 2: implement this function
-    pass
-
-def down(event):
-    """When the joystick is pushed down, change the snake's direction
-    of movement to downwards"""
-    # Task 2: implement this function
-    pass
-        
-def right(event):
-    """When the joystick is pushed right, change the snake's direction
-    of movement to the right"""
-    # Task 2: implement this function
-    pass
-
-def left(event):
-    """When the joystick is pushed left, change the snake's direction
-    of movement to the left"""
-    if event.action == sense_hat.ACTION_RELEASED:
-        snake.changeDirection(LEFT)
-
-def stopGame(event):
-    """When the middle joystick button is pressed, stop the game"""
-    if event.action == sense_hat.ACTION_RELEASED:
-        global playAgain, alive
-        playAgain = False
-        alive = False
-
-def generateFood():
-    """Places the food (target LED) on a random LED in the matrix
-    that is not in the snake"""
-    # Task 3: rewrite this function
-    return [4,5]
-
 def updateMatrix(food, snake):
     """Draws the snake and food in the new positions on the LED matrix"""
     sense.clear()
@@ -81,6 +44,42 @@ def updateMatrix(food, snake):
         sense.set_pixel(x, y, blu)
         time.sleep(0.1)
     
+def left(event):
+    """When the joystick is pushed left, change the snake's direction
+    of movement to the left"""
+    if event.action == sense_hat.ACTION_RELEASED:
+        snake.changeDirection(LEFT)
+
+def up(event):
+    """When the joystick is pushed up, change the snake's direction
+    of movement to upwards"""
+    # Task 2: implement this function
+    pass
+
+def down(event):
+    """When the joystick is pushed down, change the snake's direction
+    of movement to downwards"""
+    # Task 2: implement this function
+    pass
+        
+def right(event):
+    """When the joystick is pushed right, change the snake's direction
+    of movement to the right"""
+    # Task 2: implement this function
+    pass
+
+def generateFood():
+    """Places the food (target LED) on a random LED in the matrix
+    that is not in the snake"""
+    # Task 3: rewrite this function
+    return [4,5]
+
+def stopGame(event):
+    """When the middle joystick button is pressed, stop the game"""
+    if event.action == sense_hat.ACTION_RELEASED:
+        global playAgain, alive
+        playAgain = False
+        alive = False
 
 def die():
     """When the snake dies by going off the grid or into itself"""
