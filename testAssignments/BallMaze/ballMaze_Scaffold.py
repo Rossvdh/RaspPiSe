@@ -194,6 +194,7 @@ def play():
         
         if ballIsAlive:
             #Task 1: read roll angle, move ball up or down
+            pass
 
 def stopLooping(event):
     """When the user press the joystick middle button, stop starting

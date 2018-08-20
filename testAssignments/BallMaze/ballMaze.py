@@ -113,6 +113,7 @@ def getMoveType(ball):
     """Determines if the move is legal, into a wall, or results in
     a death or a win"""
     if not(0<= ball[0] <=7 and 0<= ball[1] <=7):
+    #if ball[0] > 7 or ball[0] < 0 or ball[1] > 7 or ball[1] < 0:
         print("DIE")
         return DIE #out of bounds. you die
     elif maze[8*ball[1] + ball[0]] == red:
