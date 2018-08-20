@@ -33,7 +33,7 @@ def pushed_up(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_down(event):
-    """What happens when the joystick is pushed up. The marker moves 
+    """What happens when the joystick is pushed down. The marker moves 
     down to square below the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
@@ -41,7 +41,7 @@ def pushed_down(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_left(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed left. The marker moves to
     the square left of the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
@@ -49,7 +49,7 @@ def pushed_left(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_right(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed right. The marker moves to
     the square right of the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))

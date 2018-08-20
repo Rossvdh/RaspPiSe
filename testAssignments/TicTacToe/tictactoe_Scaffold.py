@@ -12,29 +12,24 @@ import ttt
 def colourSquare(x, y, colour):
     """Fills the given grid square with the given colour"""
     #Task 2: complete this method
-    print("colour square")
-
 
 def pushed_up(event):
     """What happens when the joystick is pushed up. The marker moves up
     to the next square"""
     #Task 1: complete this method
-    print("up")
 
 def pushed_down(event):
-    """What happens when the joystick is pushed up. The marker moves 
+    """What happens when the joystick is pushed down. The marker moves 
     down to square below the current one"""
     #Task 1: complete this method
-    print("down")
 
 def pushed_left(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed left. The marker moves to
     the square left of the current one"""
     #Task 1: complete this method
-    print("left")
 
 def pushed_right(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed right. The marker moves to
     the square right of the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         colour = sense.get_pixel(marker[0]+1, marker[1])
@@ -62,7 +57,6 @@ def buttonPushed(event):
 def playAgain():
     """Restarts the game"""
     # Task 3: complete this function
-    pass
 
 
 # MAIN-----------------------
