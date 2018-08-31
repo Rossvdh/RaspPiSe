@@ -22,6 +22,8 @@ The project webiste will be online by the end of October. The literature review,
 
 ## Branches
 
-The master branch contains the scaffolding code, assignment instructions, and model answer for the assignments as they should be used in the course
+The master branch contains the scaffolding code and assignment instructions, as used in user testing round one.
 
 The testAssignments branch contains the scaffolding code and assignment istructions as they were used in the second round of user testing.
+
+The secondIteration branch contains the scaffolding code and assignment instructions as they should be given to students should the assignments be used in a course. It also conatins a completed version of the assignment (model answer).
