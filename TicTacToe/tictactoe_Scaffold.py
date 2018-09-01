@@ -9,35 +9,31 @@ import ttt
 # colour is the colour to make the square. array of 3 values bewteen 0 and 255
 # corresponding to red, green and blue
 # row and col are the co-ords of the marker
-def colourSquare(colour, col, row):
+def colourSquare(x, y, colour):
     """Fills the given grid square with the given colour"""
     #Task 2: complete this method
-    print("colour square")
-
 
 def pushed_up(event):
     """What happens when the joystick is pushed up. The marker moves up
     to the next square"""
     #Task 1: complete this method
-    print("up")
 
 def pushed_down(event):
-    """What happens when the joystick is pushed up. The marker moves 
+    """What happens when the joystick is pushed down. The marker moves 
     down to square below the current one"""
     #Task 1: complete this method
-    print("down")
 
 def pushed_left(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed left. The marker moves to
     the square left of the current one"""
     #Task 1: complete this method
-    print("left")
 
 def pushed_right(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed right. The marker moves to
     the square right of the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
-        sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
+        colour = sense.get_pixel(marker[0]+1, marker[1])
+        sense.set_pixel(marker[0], marker[1], colour)
         marker[0] = (marker[0] + 3) % 9
         sense.set_pixel(marker[0], marker[1], blue)
 
@@ -49,10 +45,10 @@ def buttonPushed(event):
         if sense.get_pixel(marker[0], marker[1]+1) == blank:
             if redTurn:
                 redTurn = not redTurn
-                colourSquare(red, marker[0], marker[1])
+                colourSquare(marker[0], marker[1], red)
             else:
                 redTurn = not redTurn
-                colourSquare(green, marker[0], marker[1])
+                colourSquare(marker[0], marker[1], green)
         
         if ttt.checkForResult():
             playAgain()
@@ -61,7 +57,6 @@ def buttonPushed(event):
 def playAgain():
     """Restarts the game"""
     # Task 3: complete this function
-    pass
 
 
 # MAIN-----------------------

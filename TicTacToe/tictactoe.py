@@ -12,14 +12,12 @@ import ttt
 
 # colour is the colour to make the square. array of 3 values bewteen 0 and 255
 # corresponding to red, green and blue
-# row and col are the co-ords of the grid i.e. 0 - 2
-def colourSquare(colour, col, row):
-    row = int(row)#row and col might be floats
-    col = int(col)
-    sense.set_pixel(col, row, colour)
-    sense.set_pixel(col+1, row, colour)
-    sense.set_pixel(col, row+1, colour)
-    sense.set_pixel(col+1, row+1, colour)
+# x and y are the co-ordinates of the top left pixel in the grid square
+def colourSquare(x, y, colour):
+    sense.set_pixel(x, y, colour)
+    sense.set_pixel(x+1, y, colour)
+    sense.set_pixel(x, y+1, colour)
+    sense.set_pixel(x+1, y+1, colour)
 
 
 def pushed_up(event):
@@ -35,7 +33,7 @@ def pushed_up(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_down(event):
-    """What happens when the joystick is pushed up. The marker moves 
+    """What happens when the joystick is pushed down. The marker moves 
     down to square below the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
@@ -43,7 +41,7 @@ def pushed_down(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_left(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed left. The marker moves to
     the square left of the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
@@ -51,7 +49,7 @@ def pushed_left(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def pushed_right(event):
-    """What happens when the joystick is pushed up. The marker moves to
+    """What happens when the joystick is pushed right. The marker moves to
     the square right of the current one"""
     if event.action == sense_hat.ACTION_RELEASED:
         sense.set_pixel(marker[0], marker[1], sense.get_pixel(marker[0]+1, marker[1]))
@@ -66,10 +64,10 @@ def buttonPushed(event):
         if sense.get_pixel(marker[0], marker[1]+1) == [0,0,0]:
             if redTurn:
                 redTurn = not redTurn
-                colourSquare(red, marker[0], marker[1])
+                colourSquare(marker[0], marker[1], red)
             else:
                 redTurn = not redTurn
-                colourSquare(green, marker[0], marker[1])
+                colourSquare(marker[0], marker[1], green)
         
         if ttt.checkForResult():
             playAgain()
@@ -85,6 +83,7 @@ def playAgain():
 # set up Sense Hat
 sense = sense_hat.SenseHat()
 sense.low_light = True
+
 
 #set functions for joystick buttons
 sense.stick.direction_up = pushed_up
