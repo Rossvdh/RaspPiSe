@@ -69,6 +69,9 @@ def generateFood():
 def updateMatrix(food, snake):
     """Draws the snake and food in the new positions on the LED matrix"""
     sense.clear()
+    # draw food
+    sense.set_pixel(food[0], food[1], green)
+    
     # draw snake
     snakePixels = snake.getPixels()
     for pixel in snakePixels:
@@ -87,8 +90,7 @@ def updateMatrix(food, snake):
         sense.set_pixel(x, y, blue)
         time.sleep(0.1)
 
-    # draw food
-    sense.set_pixel(food[0], food[1], green)
+    
 
 
 def die():

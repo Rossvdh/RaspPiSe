@@ -60,26 +60,26 @@ def updateMatrix(food, snake):
     sense.clear()
     # draw snake
     snakePixels = snake.getPixels()
-    for pixel in snakePixels:
-        if 0 <= pixel[0] <= 7 and 0 <= pixel[1] <= 7:
-            sense.set_pixel(pixel[0], pixel[1], blu)
-        else:
-            die()
-            return
 
-    # blink snake's head
-    for i in range(2):
-        x = snake.head()[0]
-        y = snake.head()[1]
-        sense.set_pixel(x, y, blk)
-        time.sleep(0.1)
-        sense.set_pixel(x, y, blu)
-        time.sleep(0.1)
-        
     # Task 1: Add some code here to display the food on the LED matrix
     # food is a list with 2 elements: the first is the x co-ordinate (column)
     # on the LED matrix and the second is the y co-ordinate (row)
     sense.set_pixel(food[0], food[1], green)
+
+    # Task 1: display the snake body on the LED matrix.
+    # the list snakePixels contains the pixels that make up the snake
+    # body. each pixel is a 2-tuple (x, y).
+    # snakePixels lsit structure: [(x, y), (x, y), ...]
+
+    # blink snake's head
+    x = snake.head()[0]
+    y = snake.head()[1]
+    for i in range(2):        
+        sense.set_pixel(x, y, blank)
+        time.sleep(0.1)
+        sense.set_pixel(x, y, blue)
+        time.sleep(0.1)
+        
 
 def die():
     """When the snake dies by going off the grid or into itself"""
