@@ -105,8 +105,8 @@ def playAgain():
     sense.set_pixel(marker[0], marker[1], blue)
 
     #reset board
-    board = [[blank, blank, blank],
-    [blank, blank, blank],
+    board = [[red, blank, blank],
+    [blank, green, blank],
     [blank, blank, blank]]
 
     drawBoard(board)
@@ -269,8 +269,8 @@ if __name__ == "__main__":
       blank,blank,white,blank,blank,white,blank,blank]
 
     # matrix representing the TTT grid
-    board = [[blank, blank, blank],
-       [blank, blank, blank],
+    board = [[red, blank, blank],
+       [blank, green, blank],
        [blank, blank, blank]]
 
 

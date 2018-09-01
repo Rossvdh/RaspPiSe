@@ -104,8 +104,8 @@ def playAgain():
     sense.set_pixels(grid)
     sense.set_pixel(marker[0], marker[1], blue)
 
-    board = [[blank, blank, blank],
-    [blank, blank, blank],
+    board = [[red, blank, blank],
+    [blank, green, blank],
     [blank, blank, blank]]
 
     drawBoard(board)
@@ -114,10 +114,7 @@ def playAgain():
 def drawBoard(board):
     """Draws the board on the LED matrix"""
     #Task 1: complete this function
-    for row in range(3):
-        for col in range(3):
-            colourSquare(board[col][row], row*3, col*3)
-##    pass
+    pass
 
 def copyBoard(board):
     """Creates a copy of the given board"""
@@ -125,14 +122,14 @@ def copyBoard(board):
 
 def getAvailableMoves(board):
     """"Returns a list [(row, col), ...] of blank grid sqaures"""
-    #Task 1: complete this function
+    #Task 3: complete this function
 
 
 def getBestMove(board, colour):
     """Returns the best move ((row, col), score) for the given colour on the given board"""
     #random move
-    row = random.randint(0,2)
-    col = random.randint(0,2)
+    row = random.randint(0, 2)
+    col = random.randint(0, 2)
 
     return (row, col)
 
@@ -144,7 +141,6 @@ def getBestMove(board, colour):
 
 """Performs the computer's move"""
 def computerPlay():
-    #scaffold
     global redTurn
 
     colour = red if redTurn else green
@@ -186,8 +182,8 @@ if __name__ == "__main__": #remove?
       blank,blank,white,blank,blank,white,blank,blank]
 
     # matrix representing the TTT grid
-    board = [[blank, blank, blank],
-       [blank, blank, blank],
+    board = [[red, blank, blank],
+       [blank, green, blank],
        [blank, blank, blank]]
 
 
