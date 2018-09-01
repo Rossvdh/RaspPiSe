@@ -73,7 +73,7 @@ def moveBallDown():
         ball[1] = ball[1] + 1
         sense.set_pixel(ball[0], ball[1], orange)
     elif move == HOLE:
-        #if move into hole, let the user see they moveinto the hole before dying
+        #if move into hole, let the user see they move into the hole before dying
         sense.set_pixel(ball[0], ball[1], [255,100,0])
         time.sleep(0.2)
         die()
@@ -95,7 +95,7 @@ def moveBallRight():
         ball[0] = ball[0] + 1
         sense.set_pixel(ball[0], ball[1], orange)
     elif move == HOLE:
-        #if move into hole, let the user see they moveinto the hole before dying
+        #if move into hole, let the user see they move into the hole before dying
         sense.set_pixel(ball[0], ball[1], [255,100,0])
         time.sleep(0.2)
         die()
@@ -117,7 +117,7 @@ def moveBallLeft():
         ball[0] = ball[0] - 1
         sense.set_pixel(ball[0], ball[1], orange)
     elif move == HOLE:
-        #if move into hole, let the user see they moveinto the hole before dying
+        #if move into hole, let the user see they move into the hole before dying
         sense.set_pixel(ball[0], ball[1], [255,100,0])
         time.sleep(0.2)
         die()

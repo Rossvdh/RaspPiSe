@@ -133,8 +133,8 @@ def play():
         pitch = gyro["pitch"]
         
         #Task 1: move the ball left or right depending on the pitch angle
-        
-        
+
+
         if ballIsAlive:
             #Task 2: read roll angle, move ball up or down
             pass
