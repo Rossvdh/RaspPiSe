@@ -31,7 +31,7 @@ marker=[0, 0]
 def colourSquare(x, y, colour):
     """Fills the given grid square with the given colour"""
     #Task 2: complete this method
-    pass
+    print("Colour square function")
 
 def pushed_up(event):
     """What happens when the joystick is pushed up. The marker moves up

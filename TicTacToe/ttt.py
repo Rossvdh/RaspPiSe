@@ -113,7 +113,6 @@ def checkTie():
 
 def checkForResult():
     """Checks if someone has won. Runs after every button action"""
-    print("checkWinner")
     winner = getWinner()
     
     if winner == "green":
@@ -130,5 +129,5 @@ def checkForResult():
         sense.show_message("Tie!")
         return True
     else:
-        print("no result")
+        #print("no result")
         return False
