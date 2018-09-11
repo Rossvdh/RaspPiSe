@@ -15,3 +15,9 @@ ones, and thus engage the content more, leading to improved
 programming skill.
 
 This repo is for the part of the project targeting CS students. It contains the code for the games that will be used as assignments in the course.
+
+## The snakeWithClass Branch
+
+This branch contains the implementation of the game Snake using a class representing the snake.
+
+Previously it was done with a 3-dimensional list but that got out of hand quickly.
