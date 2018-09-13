@@ -59,8 +59,9 @@ def pushed_right(event):
         sense.set_pixel(marker[0], marker[1], blue)
 
 def buttonPushed(event):
-    """What happens when the joystick button is pushed. The square is 
-    coloured with the appropriate colour"""
+    """What happens when the middle joystick button is pushed. The board
+    variable is updated and the square is coloured with the
+    appropriate colour"""
     # update board matrix
     #draw board on LEDs
     global redTurn
