@@ -189,7 +189,7 @@ def play():
     startTime = time.time()
     
     while ballIsAlive and playAgain:
-##        print("Ball:", ball)
+        #print("Ball:", ball)
         time.sleep(0.1)
 
         #read left/right angle, move ball accordingly
