@@ -18,7 +18,7 @@ This repo is for the part of the project targeting CS students. It contains the 
 
 ## Project webpage
 
-The project webiste will be online by the end of October. The literature review, proposal, and final report will be available on the website.
+The literature review, proposal, and final report will be available on the [webpage here.](http://projects.cs.uct.ac.za/honsproj/cgi-bin/view/2018/abdullahi_vanderheyde.zip/)
 
 ## Branches
 
